@@ -41,7 +41,7 @@ let videos: VideoType[] = [
 
 export const videosRouter = Router({})
 
-videosRouter.delete('/', (req: Request, res: Response) => {
+videosRouter.delete('/testing/all-data', (req: Request, res: Response) => {
   videos = []
   res.send(204)
 })
