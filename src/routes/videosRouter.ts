@@ -1,50 +1,10 @@
 import { Request, Response, Router } from 'express';
 import { body, validationResult } from 'express-validator';
+import { videos, VideoType } from '../index';
 
-type VideoType = {
-  id: number,
-  title: string,
-  author: string,
-  canBeDownloaded: boolean,
-  minAgeRestriction: null | number,
-  createdAt: string,
-  publicationDate: string,
-  availableResolutions: string[]
-}
-
-let videos: VideoType[] = [
-  {
-    id: 0,
-    title: 'id0',
-    author: 'me',
-    canBeDownloaded: true,
-    minAgeRestriction: null,
-    createdAt: new Date().toISOString(),
-    publicationDate: new Date().toISOString(),
-    availableResolutions: [
-      'P144'
-    ]
-  },
-  {
-    id: 1,
-    title: 'id1',
-    author: 'me',
-    canBeDownloaded: true,
-    minAgeRestriction: null,
-    createdAt: new Date().toISOString(),
-    publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
-    availableResolutions: [
-      'P144'
-    ]
-  },
-]
 
 export const videosRouter = Router({})
 
-videosRouter.delete('/testing/all-data', (req: Request, res: Response) => {
-  videos = []
-  res.sendStatus(204)
-})
 videosRouter.get('/', (req: Request, res: Response) => {
   res.sendStatus(200)
 })
@@ -141,7 +101,7 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
     return res.sendStatus(404);
   }
 
-  return res.send(error.array({onlyFirstError: true}))
+  return res.send({errorMessages: error.array({onlyFirstError: true})})
 })
 
 
