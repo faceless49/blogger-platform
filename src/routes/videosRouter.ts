@@ -32,7 +32,7 @@ let videos: VideoType[] = [
     canBeDownloaded: true,
     minAgeRestriction: null,
     createdAt: new Date().toISOString(),
-    publicationDate: new Date().toISOString(),
+    publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
     availableResolutions: [
       'P144'
     ]
@@ -43,7 +43,7 @@ export const videosRouter = Router({})
 
 videosRouter.delete('/testing/all-data', (req: Request, res: Response) => {
   videos = []
-  res.send(204)
+  res.sendStatus(204)
 })
 videosRouter.get('/', (req: Request, res: Response) => {
   res.send(200)
@@ -68,7 +68,7 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
       canBeDownloaded: true,
       minAgeRestriction: null,
       createdAt: new Date().toISOString(),
-      publicationDate: new Date().toISOString(),
+      publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
     }
     videos.push(newVideo);
     return res.send(newVideo)
