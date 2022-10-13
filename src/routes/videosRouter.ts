@@ -46,7 +46,7 @@ videosRouter.delete('/testing/all-data', (req: Request, res: Response) => {
   res.sendStatus(204)
 })
 videosRouter.get('/', (req: Request, res: Response) => {
-  res.send(200)
+  res.sendStatus(200)
 })
 
 videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
@@ -91,7 +91,7 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
   if (video) {
     return res.send(video)
   }
-  return res.send(404)
+  return res.sendStatus(404)
 })
 
 videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLength({
@@ -138,7 +138,7 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
   })
   const hasError = !error.isEmpty();
   if (!video && !hasError) {
-    return res.send(404);
+    return res.sendStatus(404);
   }
 
   return res.send(error.array({onlyFirstError: true}))
@@ -153,7 +153,7 @@ videosRouter.delete('/:id', (req: Request, res: Response) => {
     if (index > -1) {
       videos.splice(index, 1);
     }
-    return res.send(204)
+    return res.sendStatus(204)
   }
-  return res.send(404)
+  return res.sendStatus(404)
 })
