@@ -1,12 +1,13 @@
 import express, { Request, Response } from 'express'
-import bodyParser from 'body-parser';
 import { videosRouter } from './routes/videosRouter';
 
 const app = express();
 const port = process.env.PORT || 4000;
-const parser = bodyParser({})
 
-app.use(parser)
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
 
 app.get('/', (req: Request, res: Response) => {
   res.send('App is working')
