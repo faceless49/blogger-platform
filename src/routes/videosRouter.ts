@@ -12,7 +12,7 @@ type VideoType = {
   availableResolutions: string[]
 }
 
-const videos: VideoType[] = [
+let videos: VideoType[] = [
   {
     id: 0,
     title: 'id0',
@@ -41,8 +41,12 @@ const videos: VideoType[] = [
 
 export const videosRouter = Router({})
 
+videosRouter.delete('/', (req: Request, res: Response) => {
+  videos = []
+  res.send(204)
+})
 videosRouter.get('/', (req: Request, res: Response) => {
-  res.sendStatus(200)
+  res.send(200)
 })
 
 videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
@@ -67,7 +71,7 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
       publicationDate: new Date().toISOString(),
     }
     videos.push(newVideo);
-    // return res.send(newVideo)
+    return res.send(newVideo)
   }
 
   const error = validationResult(req).formatWith(({param, msg,}) => {
@@ -77,7 +81,7 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
     }
   })
 
-  res.sendStatus(400).send(error.array({onlyFirstError: true}))
+  res.send(error.array({onlyFirstError: true}))
 })
 
 
@@ -85,9 +89,9 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
   const {id} = req.params
   const video = videos.find((item) => item.id === +id)
   if (video) {
-    return res.sendStatus(200).send(video)
+    return res.send(video)
   }
-  return res.sendStatus(404)
+  return res.send(404)
 })
 
 videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLength({
@@ -134,14 +138,14 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
   })
   const hasError = !error.isEmpty();
   if (!video && !hasError) {
-    return res.sendStatus(404);
+    return res.send(404);
   }
 
-  return res.sendStatus(400).send(error.array({onlyFirstError: true}))
+  return res.send(error.array({onlyFirstError: true}))
 })
 
 
-videosRouter.get('/:id', (req: Request, res: Response) => {
+videosRouter.delete('/:id', (req: Request, res: Response) => {
   const {id} = req.params
   const video = videos.find((item) => item.id === +id)
   if (video) {
@@ -149,7 +153,7 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
     if (index > -1) {
       videos.splice(index, 1);
     }
-    return res.sendStatus(204)
+    return res.send(204)
   }
-  return res.sendStatus(404)
+  return res.send(404)
 })
