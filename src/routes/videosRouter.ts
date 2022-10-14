@@ -16,10 +16,16 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
   min: 0,
   max: 20,
 })], (req: Request, res: Response) => {
-
+  const error = validationResult(req).formatWith(({param, msg,}) => {
+    return {
+      message: msg,
+      field: param
+    }
+  })
+  const hasError = !error.isEmpty();
 
   const {title, author, availableResolutions} = req.body
-  if (title && author && availableResolutions) {
+  if (hasError) {
     const newVideo = {
       title,
       author,
@@ -31,17 +37,11 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
       publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
     }
     videos.push(newVideo);
-    return res.send(newVideo)
+    res.status(201).send(newVideo);
+    return
   }
 
-  const error = validationResult(req).formatWith(({param, msg,}) => {
-    return {
-      message: msg,
-      field: param
-    }
-  })
-
-  res.send(error.array({onlyFirstError: true}))
+  res.status(400).send(error.array({onlyFirstError: true}))
 })
 
 
@@ -83,15 +83,14 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
   if (video) {
     video = {
       ...video,
+      title,
       author,
       availableResolutions,
       minAgeRestriction,
       publicationDate,
-      title: req.body.title,
       canBeDownloaded,
       createdAt
     }
-    debugger
     return res.sendStatus(204)
   }
   const error = validationResult(req).formatWith(({param, msg,}) => {
@@ -116,8 +115,8 @@ videosRouter.delete('/:id', (req: Request, res: Response) => {
     const index = videos.indexOf(video);
     if (index > -1) {
       videos.splice(index, 1);
+      return res.sendStatus(204)
     }
-    return res.sendStatus(204)
   }
-  return res.sendStatus(404)
+  return res.status(404)
 })
