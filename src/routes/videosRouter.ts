@@ -25,7 +25,7 @@ videosRouter.post('/', [body('title').trim().notEmpty().isString().isLength({
   min: 0,
   max: 20,
 }),
-  body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}).custom((value) => {
+  body('availableResolutions').isArray().optional({nullable: true}).custom((value) => {
     value.forEach((el: any) => {
       if (el == 'P144' || el == 'P240' || el == 'P360' || el == 'P480' || el == 'P720' || el == 'P1080' || el == 'P1440' || el == 'P2160') {
         return true
