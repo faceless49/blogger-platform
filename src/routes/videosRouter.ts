@@ -118,5 +118,5 @@ videosRouter.delete('/:id', (req: Request, res: Response) => {
       return res.sendStatus(204)
     }
   }
-  return res.status(404)
+  return res.status(404).send(404)
 })
