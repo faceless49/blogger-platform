@@ -84,10 +84,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
         min: 1,
         max: 20,
       }),
-      body('minAgeRestriction').trim().notEmpty().isLength({
-        min: 1,
-        max: 18,
-      }).optional({nullable: true}),
+      body('minAgeRestriction').trim().notEmpty().isFloat({ min: 1, max: 18 }).optional({nullable: true}),
       body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}),
       body('canBeDownloaded').isBoolean()],
     (req: Request<VideoType>, res: Response) => {
@@ -137,7 +134,6 @@ videosRouter.get('/', (req: Request, res: Response) => {
 
   .delete('/:id', (req: Request, res: Response) => {
     const {id} = req.params
-    let str = '';
     const video = videos.find((item) => item.id === +id)
     if (video) {
       const index = videos.indexOf(video);
