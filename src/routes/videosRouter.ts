@@ -118,9 +118,9 @@ videosRouter.get('/', (req: Request, res: Response) => {
           author,
           availableResolutions,
           minAgeRestriction: +minAgeRestriction,
-          publicationDate,
+          publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
           canBeDownloaded,
-          createdAt
+          createdAt: new Date().toISOString()
         }
         const index = videos.indexOf(video);
         if (index > 0 && !hasError) {
