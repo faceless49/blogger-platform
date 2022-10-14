@@ -84,9 +84,13 @@ videosRouter.get('/', (req: Request, res: Response) => {
         min: 1,
         max: 20,
       }),
-      body('minAgeRestriction').trim().notEmpty().isFloat({ min: 1, max: 18 }).optional({nullable: true}),
+      body('minAgeRestriction').trim().notEmpty().isFloat({
+        min: 1,
+        max: 18
+      }).optional({nullable: true}),
       body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}),
-      body('canBeDownloaded').isBoolean()],
+      body('canBeDownloaded').isBoolean(),
+      body('publicationDate').isISO8601(),],
     (req: Request<VideoType>, res: Response) => {
       const {
         id
