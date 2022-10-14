@@ -101,6 +101,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
         minAgeRestriction = null,
         title,
         canBeDownloaded = false,
+        publicationDate
       } = req.body
       const video = videos.find((item) => item.id === +id)
       const error = validationResult(req).formatWith(({param, msg,}) => {
@@ -117,7 +118,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
           author,
           availableResolutions,
           minAgeRestriction: +minAgeRestriction,
-          publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
+          publicationDate,
           canBeDownloaded,
           createdAt: new Date().toISOString()
         }
