@@ -98,10 +98,8 @@ videosRouter.get('/', (req: Request, res: Response) => {
         author,
         availableResolutions,
         minAgeRestriction = null,
-        publicationDate,
         title,
         canBeDownloaded = false,
-        createdAt
       } = req.body
       const video = videos.find((item) => item.id === +id)
       const error = validationResult(req).formatWith(({param, msg,}) => {
@@ -133,7 +131,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
         return res.send(404);
       }
 
-      return res.status(400).send({errorMessages: error.array({onlyFirstError: true})})
+      return res.status(400).send({errorsMessages: error.array({onlyFirstError: true})})
     })
 
 
