@@ -24,7 +24,8 @@ videosRouter.post('/', [body('title').trim().notEmpty().isLength({
 }), body('author').trim().notEmpty().isLength({
   min: 0,
   max: 20,
-}), body('availableResolutions.*').notEmpty()], (req: Request, res: Response) => {
+}),
+  body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true})], (req: Request, res: Response) => {
   const error = validationResult(req).formatWith(({param, msg,}) => {
     return {
       message: msg,
@@ -69,18 +70,21 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
 
 videosRouter.put<VideoType>('/:id',
 
-  [body('title').trim().not().isEmpty().isLength({
+  [body('title').trim().notEmpty().isLength({
     min: 1,
     max: 40
   }),
-    body('author').not().isEmpty().trim().isLength({
+    body('author').trim().notEmpty().isLength({
       min: 1,
       max: 20,
     }),
-    body('minAgeRestriction').not().isEmpty().trim().isLength({
+    body('minAgeRestriction').trim().notEmpty().isLength({
       min: 1,
       max: 18,
-    })], (req: Request<VideoType>, res: Response) => {
+    }).optional({nullable: true}),
+    body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}),
+    body('canBeDownloaded').isBoolean()],
+  (req: Request<VideoType>, res: Response) => {
     const {
       id
     } = req.params;
@@ -90,7 +94,7 @@ videosRouter.put<VideoType>('/:id',
       minAgeRestriction,
       publicationDate,
       title,
-      canBeDownloaded,
+      canBeDownloaded = false,
       createdAt
     } = req.body
     const video = videos.find((item) => item.id === +id)
