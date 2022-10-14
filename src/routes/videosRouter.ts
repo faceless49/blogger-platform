@@ -18,14 +18,14 @@ videosRouter.get('/', (req: Request, res: Response) => {
   res.send(videos)
 })
 
-videosRouter.post('/', [body('title').trim().notEmpty().isLength({
+videosRouter.post('/', [body('title').trim().notEmpty().isString().isLength({
   min: 0,
   max: 40
 }), body('author').trim().notEmpty().isLength({
   min: 0,
   max: 20,
 }),
-  body('availableResolutions').trim().notEmpty().isString().optional({nullable: true}).isIn(['P144', "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"])], (req: Request, res: Response) => {
+  body('availableResolutions').isArray().trim().notEmpty().isString().optional({nullable: true}).isIn(['P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160'])], (req: Request, res: Response) => {
   const error = validationResult(req).formatWith(({param, msg,}) => {
     return {
       message: msg,
@@ -70,11 +70,11 @@ videosRouter.get('/:id', (req: Request, res: Response) => {
 
 videosRouter.put<VideoType>('/:id',
 
-  [body('title').trim().notEmpty().isLength({
-    min: 1,
+  [body('title').trim().notEmpty().isString().isLength({
+    min: 0,
     max: 40
   }),
-    body('author').trim().notEmpty().isLength({
+    body('author').trim().notEmpty().isString().isLength({
       min: 1,
       max: 20,
     }),
@@ -91,7 +91,7 @@ videosRouter.put<VideoType>('/:id',
     const {
       author,
       availableResolutions,
-      minAgeRestriction,
+      minAgeRestriction = null,
       publicationDate,
       title,
       canBeDownloaded = false,
