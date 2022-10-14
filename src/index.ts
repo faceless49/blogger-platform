@@ -11,32 +11,7 @@ export type VideoType = {
   publicationDate: string,
   availableResolutions: string[]
 }
-export let videos: VideoType[] = [
-  {
-    id: 0,
-    title: 'id0',
-    author: 'me',
-    canBeDownloaded: true,
-    minAgeRestriction: null,
-    createdAt: new Date().toISOString(),
-    publicationDate: new Date().toISOString(),
-    availableResolutions: [
-      'P144'
-    ]
-  },
-  {
-    id: 1,
-    title: 'id1',
-    author: 'me',
-    canBeDownloaded: true,
-    minAgeRestriction: null,
-    createdAt: new Date().toISOString(),
-    publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
-    availableResolutions: [
-      'P144'
-    ]
-  },
-]
+export let videos: VideoType[] = []
 
 const app = express();
 const port = process.env.PORT || 4000;

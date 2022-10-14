@@ -30,15 +30,15 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
       title,
       author,
       availableResolutions,
-      id: 3,
+      id: Math.floor(Math.random() * 100),
       canBeDownloaded: false,
       minAgeRestriction: null,
       createdAt: new Date().toISOString(),
       publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
     }
-    videos.push(newVideo);
     res.status(201).send(newVideo);
-    return
+    videos.push(newVideo);
+    return;
   }
 
   res.status(400).send({errorMessages: error.array({onlyFirstError: true})})
@@ -110,6 +110,7 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
 
 videosRouter.delete('/:id', (req: Request, res: Response) => {
   const {id} = req.params
+  let str = '';
   const video = videos.find((item) => item.id === +id)
   if (video) {
     const index = videos.indexOf(video);
