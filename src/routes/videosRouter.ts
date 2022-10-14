@@ -1,8 +1,17 @@
 import { Request, Response, Router } from 'express';
 import { body, validationResult } from 'express-validator';
-import { videos, VideoType } from '../index';
 
-
+export type VideoType = {
+  id: number,
+  title: string,
+  author: string,
+  canBeDownloaded: boolean,
+  minAgeRestriction: null | number,
+  createdAt: string,
+  publicationDate: string,
+  availableResolutions: string[]
+}
+export let videos: VideoType[] = []
 export const videosRouter = Router({})
 
 videosRouter.get('/', (req: Request, res: Response) => {
@@ -18,9 +27,9 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
 })], (req: Request, res: Response) => {
   const error = validationResult(req).formatWith(({param, msg,}) => {
     return {
-       message: msg,
-       field: param
-     }
+      message: msg,
+      field: param
+    }
   })
   const hasError = !error.isEmpty();
 
@@ -32,7 +41,7 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
       availableResolutions,
       id: Math.floor(Math.random() * 100),
       canBeDownloaded: false,
-      minAgeRestriction: null,
+      minAgeRestriction: Math.floor(Math.random() * 18),
       createdAt: new Date().toISOString(),
       publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
     }
@@ -65,6 +74,13 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
   body('minAgeRestriction').not().isEmpty().trim().isLength({
     min: 1,
     max: 18,
+  }),
+  body('title').trim().not().isEmpty().isLength({
+    min: 0,
+    max: 40
+  }), body('author').not().isEmpty().trim().isLength({
+    min: 0,
+    max: 20,
   })], (req: Request<VideoType>, res: Response) => {
   const {
     id
@@ -83,6 +99,7 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
   if (video) {
     video = {
       ...video,
+      id,
       title,
       author,
       availableResolutions,
@@ -91,7 +108,9 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
       canBeDownloaded,
       createdAt
     }
-    return res.sendStatus(204)
+
+
+    return res.send(204);
   }
   const error = validationResult(req).formatWith(({param, msg,}) => {
     return {
@@ -101,7 +120,7 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
   })
   const hasError = !error.isEmpty();
   if (!video && !hasError) {
-    return res.sendStatus(404);
+    return res.send(404);
   }
 
   return res.send({errorMessages: error.array({onlyFirstError: true})})

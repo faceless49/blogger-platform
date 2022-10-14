@@ -1,17 +1,7 @@
 import express, { Request, Response } from 'express'
-import { videosRouter } from './routes/videosRouter';
+import { videos, videosRouter } from './routes/videosRouter';
 
-export type VideoType = {
-  id: number,
-  title: string,
-  author: string,
-  canBeDownloaded: boolean,
-  minAgeRestriction: null | number,
-  createdAt: string,
-  publicationDate: string,
-  availableResolutions: string[]
-}
-export let videos: VideoType[] = []
+
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -26,7 +16,6 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
-  videos = []
   res.sendStatus(204).send(videos)
 })
 
