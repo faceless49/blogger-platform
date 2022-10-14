@@ -90,7 +90,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
       }).optional({nullable: true}),
       body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}),
       body('canBeDownloaded').isBoolean(),
-      body('publicationDate').isISO8601().toDate(),],
+      body('publicationDate').isString()],
     (req: Request<VideoType>, res: Response) => {
       const {
         id
