@@ -18,13 +18,13 @@ videosRouter.get('/', (req: Request, res: Response) => {
   res.send(videos)
 })
 
-videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
+videosRouter.post('/', [body('title').trim().notEmpty().isLength({
   min: 0,
   max: 40
-}), body('author').not().isEmpty().trim().isLength({
+}), body('author').trim().notEmpty().isLength({
   min: 0,
   max: 20,
-})], (req: Request, res: Response) => {
+}), body('availableResolutions.*').notEmpty()], (req: Request, res: Response) => {
   const error = validationResult(req).formatWith(({param, msg,}) => {
     return {
       message: msg,
@@ -97,11 +97,11 @@ videosRouter.put<VideoType>('/:id',
 
     if (video) {
       const updatedVideo = {
-        ...video,
+        id: +id,
         title,
         author,
         availableResolutions,
-        minAgeRestriction,
+        minAgeRestriction: +minAgeRestriction,
         publicationDate,
         canBeDownloaded,
         createdAt
