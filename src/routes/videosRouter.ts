@@ -25,7 +25,7 @@ videosRouter.post('/', [body('title').trim().notEmpty().isLength({
   min: 0,
   max: 20,
 }),
-  body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true})], (req: Request, res: Response) => {
+  body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}).isIn(['P144', "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"])], (req: Request, res: Response) => {
   const error = validationResult(req).formatWith(({param, msg,}) => {
     return {
       message: msg,
@@ -36,7 +36,7 @@ videosRouter.post('/', [body('title').trim().notEmpty().isLength({
 
   const {title, author, availableResolutions} = req.body
   if (!hasError) {
-    const newVideo = {
+    const newVideo: VideoType = {
       title,
       author,
       availableResolutions,
