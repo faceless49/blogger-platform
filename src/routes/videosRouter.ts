@@ -49,7 +49,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
         availableResolutions: req.body.availableResolutions,
         id: Math.floor(Math.random() * 100),
         canBeDownloaded: false,
-        minAgeRestriction: Math.floor(Math.random() * 18),
+        minAgeRestriction: null,
         createdAt: new Date().toISOString(),
         publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
       }
