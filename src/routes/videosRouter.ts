@@ -112,6 +112,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
       })
       const hasError = error.isEmpty();
       if (video) {
+        const index = videos.indexOf(video);
         const updatedVideo = {
           id: +id,
           createdAt: new Date().toISOString(),
@@ -122,7 +123,6 @@ videosRouter.get('/', (req: Request, res: Response) => {
           publicationDate,
           canBeDownloaded,
         }
-        const index = videos.indexOf(video);
         if (index > 0 && hasError) {
           videos.splice(index, 1, updatedVideo)
           return res.send(204);
