@@ -18,14 +18,14 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
 })], (req: Request, res: Response) => {
   const error = validationResult(req).formatWith(({param, msg,}) => {
     return {
-      message: msg,
-      field: param
-    }
+       message: msg,
+       field: param
+     }
   })
   const hasError = !error.isEmpty();
 
   const {title, author, availableResolutions} = req.body
-  if (hasError) {
+  if (!hasError) {
     const newVideo = {
       title,
       author,
@@ -41,7 +41,7 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
     return
   }
 
-  res.status(400).send(error.array({onlyFirstError: true}))
+  res.status(400).send({errorMessages: error.array({onlyFirstError: true})})
 })
 
 
