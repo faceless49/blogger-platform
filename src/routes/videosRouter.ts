@@ -114,13 +114,13 @@ videosRouter.get('/', (req: Request, res: Response) => {
       if (video) {
         const updatedVideo = {
           id: +id,
+          createdAt: new Date().toISOString(),
           title,
           author,
           availableResolutions,
           minAgeRestriction: +minAgeRestriction,
           publicationDate,
           canBeDownloaded,
-          createdAt: new Date().toISOString()
         }
         const index = videos.indexOf(video);
         if (index > 0 && hasError) {
