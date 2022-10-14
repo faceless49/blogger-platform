@@ -90,7 +90,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
       }).optional({nullable: true}),
       body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}),
       body('canBeDownloaded').isBoolean(),
-      body('publicationDate').isISO8601(),],
+      body('publicationDate').isDate({format: new Date().toISOString()}),],
     (req: Request<VideoType>, res: Response) => {
       const {
         id
@@ -110,7 +110,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
           field: param
         }
       })
-      const hasError = !error.isEmpty();
+      const hasError = error.isEmpty();
       if (video) {
         const updatedVideo = {
           id: +id,
@@ -123,13 +123,13 @@ videosRouter.get('/', (req: Request, res: Response) => {
           createdAt: new Date().toISOString()
         }
         const index = videos.indexOf(video);
-        if (index > 0 && !hasError) {
+        if (index > 0 && hasError) {
           videos.splice(index, 1, updatedVideo)
           return res.send(204);
         }
       }
 
-      if (!video && !hasError) {
+      if (!video) {
         return res.send(404);
       }
 
@@ -147,5 +147,5 @@ videosRouter.get('/', (req: Request, res: Response) => {
         return res.sendStatus(204)
       }
     }
-    return res.status(404).send(404)
+    return res.send(404)
   })
