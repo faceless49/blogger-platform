@@ -25,7 +25,15 @@ videosRouter.post('/', [body('title').trim().notEmpty().isString().isLength({
   min: 0,
   max: 20,
 }),
-  body('availableResolutions').isArray().trim().notEmpty().isString().optional({nullable: true}).isIn(['P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160'])], (req: Request, res: Response) => {
+  body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}).custom((value) => {
+    value.forEach((el: any) => {
+      if (el == 'P144' || el == 'P240' || el == 'P360' || el == 'P480' || el == 'P720' || el == 'P1080' || el == 'P1440' || el == 'P2160') {
+        return true
+      }
+      throw new Error('The el is required')
+    });
+    return true;
+  })], (req: Request, res: Response) => {
   const error = validationResult(req).formatWith(({param, msg,}) => {
     return {
       message: msg,
@@ -33,13 +41,12 @@ videosRouter.post('/', [body('title').trim().notEmpty().isString().isLength({
     }
   })
   const hasError = !error.isEmpty();
-
-  const {title, author, availableResolutions} = req.body
+  const {title, author} = req.body
   if (!hasError) {
     const newVideo: VideoType = {
       title,
       author,
-      availableResolutions,
+      availableResolutions: req.body.availableResolutions,
       id: Math.floor(Math.random() * 100),
       canBeDownloaded: false,
       minAgeRestriction: Math.floor(Math.random() * 18),
