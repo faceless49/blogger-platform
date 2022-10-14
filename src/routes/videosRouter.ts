@@ -6,7 +6,7 @@ import { videos, VideoType } from '../index';
 export const videosRouter = Router({})
 
 videosRouter.get('/', (req: Request, res: Response) => {
-  res.sendStatus(200)
+  res.send(videos)
 })
 
 videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
@@ -25,7 +25,7 @@ videosRouter.post('/', [body('title').trim().not().isEmpty().isLength({
       author,
       availableResolutions,
       id: 3,
-      canBeDownloaded: true,
+      canBeDownloaded: false,
       minAgeRestriction: null,
       createdAt: new Date().toISOString(),
       publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
@@ -67,7 +67,9 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
     max: 18,
   })], (req: Request<VideoType>, res: Response) => {
   const {
-    id,
+    id
+  } = req.params;
+  const {
     author,
     availableResolutions,
     minAgeRestriction,
@@ -75,8 +77,9 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
     title,
     canBeDownloaded,
     createdAt
-  } = req.params
+  } = req.body
   let video = videos.find((item) => item.id === +id)
+
   if (video) {
     video = {
       ...video,
@@ -84,10 +87,11 @@ videosRouter.put<VideoType>('/:id', [body('title').trim().not().isEmpty().isLeng
       availableResolutions,
       minAgeRestriction,
       publicationDate,
-      title,
+      title: req.body.title,
       canBeDownloaded,
       createdAt
     }
+    debugger
     return res.sendStatus(204)
   }
   const error = validationResult(req).formatWith(({param, msg,}) => {
