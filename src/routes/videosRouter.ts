@@ -103,7 +103,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
         canBeDownloaded = false,
         publicationDate
       } = req.body
-      const video = videos.find((item) => item.id === +id)
+      let video = videos.find((item) => item.id === +id)
       const error = validationResult(req).formatWith(({param, msg,}) => {
         return {
           message: msg,
@@ -111,22 +111,15 @@ videosRouter.get('/', (req: Request, res: Response) => {
         }
       })
       const hasError = error.isEmpty();
-      if (video) {
-        const index = videos.indexOf(video);
-        const updatedVideo = {
-          id: +id,
-          createdAt: new Date().toISOString(),
-          title,
-          author,
-          availableResolutions,
-          minAgeRestriction: +minAgeRestriction,
-          publicationDate,
-          canBeDownloaded,
-        }
-        if (index > 0 && hasError) {
-          videos.splice(index, 1, updatedVideo)
-          return res.send(204);
-        }
+      if (video && hasError) {
+        video.createdAt = new Date().toISOString()
+        video.title = title;
+        video.author = author;
+        video.availableResolutions = availableResolutions;
+        video.minAgeRestriction = +minAgeRestriction;
+        video.publicationDate = publicationDate;
+        video.canBeDownloaded = canBeDownloaded;
+        return res.send(204);
       }
 
       if (!video) {
