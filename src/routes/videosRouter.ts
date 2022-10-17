@@ -112,7 +112,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
       })
       const hasError = error.isEmpty();
       if (video && hasError) {
-        video.createdAt = new Date().toISOString()
+        // video.createdAt = new Date().toISOString()
         video.title = title;
         video.author = author;
         video.availableResolutions = availableResolutions;
