@@ -1,21 +1,11 @@
 import { Request, Response, Router } from 'express';
 import { body, validationResult } from 'express-validator';
+import { videosRepository } from '../repositories/videosRepository';
 
-export type VideoType = {
-  id: number,
-  title: string,
-  author: string,
-  canBeDownloaded: boolean,
-  minAgeRestriction: null | number,
-  createdAt: string,
-  publicationDate: string,
-  availableResolutions: string[]
-}
-export let videos: VideoType[] = []
 export const videosRouter = Router({})
 
 videosRouter.get('/', (req: Request, res: Response) => {
-  res.send(videos)
+  return res.send(videosRepository.getVideos)
 })
 
   .post('/', [body('title').trim().notEmpty().isString().isLength({
@@ -41,20 +31,10 @@ videosRouter.get('/', (req: Request, res: Response) => {
       }
     })
     const hasError = !error.isEmpty();
-    const {title, author} = req.body
+    const {title, author, availableResolutions} = req.body
     if (!hasError) {
-      const newVideo: VideoType = {
-        title,
-        author,
-        availableResolutions: req.body.availableResolutions,
-        id: Math.floor(Math.random() * 100),
-        canBeDownloaded: false,
-        minAgeRestriction: null,
-        createdAt: new Date().toISOString(),
-        publicationDate: new Date(Date.now() + (3600 * 1000 * 24)).toISOString(),
-      }
+      const newVideo = videosRepository.createVideo(title, author, availableResolutions);
       res.status(201).send(newVideo);
-      videos.push(newVideo);
       return;
     }
 
@@ -68,14 +48,12 @@ videosRouter.get('/', (req: Request, res: Response) => {
 
   .get('/:id', (req: Request, res: Response) => {
     const {id} = req.params
-    const video = videos.find((item) => item.id === +id)
-    if (video) {
-      return res.send(video)
-    }
-    return res.sendStatus(404)
+    const video = videosRepository.getVideoById(+id)
+    video ? res.send(video) : res.sendStatus(404)
+    return;
   })
 
-  .put<VideoType>('/:id',
+  .put('/:id',
     [body('title').trim().notEmpty().isString().isLength({
       min: 0,
       max: 40
@@ -91,7 +69,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
       body('availableResolutions.*').trim().notEmpty().isString().optional({nullable: true}),
       body('canBeDownloaded').isBoolean(),
       body('publicationDate').isString()],
-    (req: Request<VideoType>, res: Response) => {
+    (req: Request, res: Response) => {
       const {
         id
       } = req.params;
@@ -103,42 +81,37 @@ videosRouter.get('/', (req: Request, res: Response) => {
         canBeDownloaded = false,
         publicationDate
       } = req.body
-      let video = videos.find((item) => item.id === +id)
       const error = validationResult(req).formatWith(({param, msg,}) => {
         return {
           message: msg,
           field: param
         }
       })
+
+      const payload = {
+        id: +id,
+        title,
+        author,
+        availableResolutions,
+        minAgeRestriction: +minAgeRestriction,
+        publicationDate,
+        canBeDownloaded
+      }
+      const isUpdated = videosRepository.updateVideoById(payload);
+
       const hasError = error.isEmpty();
-      if (video && hasError) {
-        // video.createdAt = new Date().toISOString()
-        video.title = title;
-        video.author = author;
-        video.availableResolutions = availableResolutions;
-        video.minAgeRestriction = +minAgeRestriction;
-        video.publicationDate = publicationDate;
-        video.canBeDownloaded = canBeDownloaded;
+      if (isUpdated && hasError) {
         return res.send(204);
       }
-
-      if (!video) {
+      if (!isUpdated) {
         return res.send(404);
       }
-
       return res.status(400).send({errorsMessages: error.array({onlyFirstError: true})})
     })
 
 
   .delete('/:id', (req: Request, res: Response) => {
     const {id} = req.params
-    const video = videos.find((item) => item.id === +id)
-    if (video) {
-      const index = videos.indexOf(video);
-      if (index > -1) {
-        videos.splice(index, 1);
-        return res.sendStatus(204)
-      }
-    }
-    return res.send(404)
+    const isDeleted = videosRepository.deleteVideoById(+id)
+    isDeleted ? res.sendStatus(204) : res.send(404)
   })

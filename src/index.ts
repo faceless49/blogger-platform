@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
-import { videos, videosRouter } from './routes/videosRouter';
+import { videosRouter } from './routes/videosRouter';
+import { videos } from './repositories/videosRepository';
 
 
 
@@ -15,6 +16,8 @@ app.get('/', (req: Request, res: Response) => {
   res.send('App is working')
 })
 
+
+
 app.delete('/testing/all-data', (req: Request, res: Response) => {
 
   res.sendStatus(204).send(videos)
@@ -25,3 +28,4 @@ app.listen(port, () => {
 })
 
 app.use('/videos', videosRouter)
+// app.use('/blogs', blogsRouter)
