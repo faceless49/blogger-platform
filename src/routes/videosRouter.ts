@@ -5,7 +5,7 @@ import { videosRepository } from '../repositories/videosRepository';
 export const videosRouter = Router({})
 
 videosRouter.get('/', (req: Request, res: Response) => {
-  return res.send(videosRepository.getVideos)
+  return res.send(videosRepository.getVideos())
 })
 
   .post('/', [body('title').trim().notEmpty().isString().isLength({
