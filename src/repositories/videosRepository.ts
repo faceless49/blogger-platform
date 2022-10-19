@@ -1,13 +1,4 @@
-export type VideoType = {
-  id: number,
-  title: string,
-  author: string,
-  canBeDownloaded: boolean,
-  minAgeRestriction: null | number,
-  createdAt: string,
-  publicationDate: string,
-  availableResolutions: string[]
-}
+import { Resolutions, VideoType } from '../types';
 
 export const videos: VideoType[] = []
 
@@ -30,7 +21,7 @@ export const videosRepository = {
     }
     return false
   },
-  createVideo(title: string, author: string, availableResolutions: string[]) {
+  createVideo(title: string, author: string, availableResolutions: Resolutions[]) {
     const newVideo: VideoType = {
       title,
       author,
