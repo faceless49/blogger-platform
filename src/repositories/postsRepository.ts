@@ -23,21 +23,20 @@ export const postsRepository = {
     return false
   },
 
-  createPost(payload: Omit<PostType, "id" | "blogName">) {
+  createPost(payload: Omit<PostType, 'id'>) {
     const newPost = {
       ...payload,
-      id: '',
-      blogId: ''
+      id: new Date().toISOString(),
     }
-    // posts.push(newPost);
-    // return newPost
+    posts.push(newPost);
+    return newPost
   },
   updatePostById(payload: PostType) {
     let post = posts.find(post => post.id === payload.id)
     if (post) {
-     post = {
-       ...payload
-     }
+      post = {
+        ...payload
+      }
       return true
     }
     return false

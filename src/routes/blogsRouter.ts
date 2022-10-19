@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import { blogRepository } from '../repositories/blogRepository';
 import { inputValidationMiddleware } from '../middlewares/inputValidationMiddleware';
 import { BlogType } from '../types';
+import { authValidationMiddleware } from '../middlewares/authValidationMiddleware';
 
 const youtubeRegex = new RegExp('/^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/')
 export const blogsRouter = Router({})
@@ -19,7 +20,10 @@ blogsRouter.get('/', (req: Request, res: Response) => {
   res.send(blogRepository.getBlogs())
 })
 
-  .post('/', nameValidation, urlYoutubeValidation, inputValidationMiddleware,
+  .post('/', authValidationMiddleware,
+    nameValidation,
+    urlYoutubeValidation,
+    inputValidationMiddleware,
     (req: Request, res: Response) => {
 
       const {name, youtubeUrl} = req.body;
@@ -36,7 +40,10 @@ blogsRouter.get('/', (req: Request, res: Response) => {
   })
 
   .put('/:id',
-    nameValidation, urlYoutubeValidation, inputValidationMiddleware,
+    authValidationMiddleware,
+    nameValidation,
+    urlYoutubeValidation,
+    inputValidationMiddleware,
     (req: Request, res: Response) => {
       const {
         id
@@ -49,9 +56,10 @@ blogsRouter.get('/', (req: Request, res: Response) => {
     })
 
 
-  .delete('/:id', (req: Request, res: Response) => {
-    const {id} = req.params
-    const isDeleted = blogRepository.deleteVideoById(id);
+  .delete('/:id', authValidationMiddleware,
+    (req: Request, res: Response) => {
+      const { id } = req.params
+      const isDeleted = blogRepository.deleteVideoById(id);
 
-    isDeleted ? res.sendStatus(204) : res.send(404)
-  })
+      isDeleted ? res.sendStatus(204) : res.send(404)
+    })

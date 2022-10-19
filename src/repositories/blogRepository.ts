@@ -25,8 +25,7 @@ export const blogRepository = {
 
   createBlog(name: string, youtubeUrl: string) {
     const newBlog: BlogType = {
-      //TODO
-      id: '0',
+      id: Math.floor(Math.random() * 100).toString(),
       name,
       youtubeUrl
     }
@@ -39,9 +38,8 @@ export const blogRepository = {
   }: BlogType) {
     const blog = blogs.find(blog => blog.id === id)
     if (blog) {
-      blog.id = id,
-        blog.name = name,
-        blog.youtubeUrl = youtubeUrl
+        blog.name = name;
+        blog.youtubeUrl = youtubeUrl;
       return true
     }
     return false

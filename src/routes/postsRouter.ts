@@ -4,26 +4,45 @@ import { blogRepository } from '../repositories/blogRepository';
 import { inputValidationMiddleware } from '../middlewares/inputValidationMiddleware';
 import { BlogType, PostType } from '../types';
 import { postsRepository } from '../repositories/postsRepository';
+import { authValidationMiddleware } from '../middlewares/authValidationMiddleware';
 
 export const postsRouter = Router({})
-
 const titleValidation = body('title').trim().notEmpty().isString().isLength({max: 30});
-const shortDescription = body('shortDescription').trim().notEmpty().isString().isLength({max: 100});
-const content = body('content').trim().notEmpty().isString().isLength({max: 1000});
-const blogId = body('blogId').trim().notEmpty().isString()
-const blogName = body('blogName').trim().notEmpty().isString()
+const shortDescriptionValidation = body('shortDescription').trim().notEmpty().isString().isLength({max: 100});
+const contentValidation = body('content').trim().notEmpty().isString().isLength({max: 1000});
+const blogIdValidation = body('blogId').trim().notEmpty().isString()
+const blogNameValidation = body('blogName').trim().notEmpty().isString()
 
 
 postsRouter.get('/', (req: Request, res: Response) => {
   res.send(postsRepository.getPosts())
 })
 
-  .post('/', inputValidationMiddleware,
+  .post('/',
+    authValidationMiddleware,
+    titleValidation,
+    shortDescriptionValidation,
+    contentValidation,
+    blogIdValidation,
+    body('blogId').custom((value, { req }) => {
+      const blogger = blogRepository.getBlogById(req.body.blogId);
+      if (!blogger) {
+        throw new Error('Blogger not found');
+      }
+      return true;
+    }),
+    inputValidationMiddleware,
     (req: Request<Omit<PostType, 'id' | 'blogName'>>, res: Response) => {
 
       const {title, shortDescription, content, blogId} = req.body;
-
-      res.send(postsRepository.createPost({title, shortDescription, content, blogId}))
+      const blogger = blogRepository.getBlogById(blogId);
+      if (blogger) {
+        const payload = {
+          title, shortDescription, content, blogName: blogger.name, blogId
+        }
+        return res.send(postsRepository.createPost(payload))
+      }
+      return res.send(400)
     })
 
 
