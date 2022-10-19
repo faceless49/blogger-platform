@@ -10,7 +10,7 @@ export const inputValidationMiddleware = (req: Request, res: Response, next: Nex
     }
   });
   if (!errors.isEmpty()) {
-    return res.status(400).json({errorsMessages: errors.array()});
+    return res.status(400).json({errorsMessages: errors.array({onlyFirstError: true})});
   }
   next()
 }
