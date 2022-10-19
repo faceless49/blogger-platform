@@ -34,10 +34,10 @@ export const postsRepository = {
   updatePostById(payload: Omit<PostType, 'blogName'>) {
     let post = posts.find(post => post.id === payload.id)
     if (post) {
-      post = {
-        ...post,
-        ...payload
-      }
+      post.title = payload.title
+      post.shortDescription = payload.shortDescription
+      post.content = payload.content
+      post.blogId = payload.blogId
       return true
     }
     return false

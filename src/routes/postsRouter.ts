@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import { body } from 'express-validator';
 import { blogRepository } from '../repositories/blogRepository';
 import { inputValidationMiddleware } from '../middlewares/inputValidationMiddleware';
-import { BlogType, PostType } from '../types';
+import { PostType } from '../types';
 import { postsRepository } from '../repositories/postsRepository';
 import { authValidationMiddleware } from '../middlewares/authValidationMiddleware';
 
@@ -39,7 +39,7 @@ postsRouter.get('/', (req: Request, res: Response) => {
         const payload = {
           title, shortDescription, content, blogName: blogger.name, blogId
         }
-        return res.send(postsRepository.createPost(payload))
+        return res.sendStatus(201).send(postsRepository.createPost(payload))
       }
       return res.send(400)
     })
