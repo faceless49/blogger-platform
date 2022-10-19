@@ -10,9 +10,17 @@ export type VideoType = {
 }
 
 export type BlogType = {
-  id: number,
+  id: string,
   name: string,
   youtubeUrl: string
+}
+export type PostType =  {
+  id: string,
+  title: string,
+  shortDescription: string,
+  content: string,
+  blogId: string,
+  blogName: string
 }
 
 export const enum Resolutions {

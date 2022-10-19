@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import { videosRouter } from './routes/videosRouter';
-import { videos } from './repositories/videosRepository';
-
+import { blogsRouter } from './routes/blogsRouter';
+import { postsRouter } from './routes/postsRouter';
 
 
 const app = express();
@@ -17,10 +17,8 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 
-
 app.delete('/testing/all-data', (req: Request, res: Response) => {
-
-  res.sendStatus(204).send(videos)
+  res.sendStatus(204)
 })
 
 app.listen(port, () => {
@@ -28,4 +26,5 @@ app.listen(port, () => {
 })
 
 app.use('/videos', videosRouter)
-// app.use('/blogs', blogsRouter)
+app.use('/blogs', blogsRouter)
+app.use('/posts', postsRouter)

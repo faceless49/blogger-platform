@@ -1,18 +1,18 @@
-import { BlogType, Resolutions, VideoType } from '../types';
+import { BlogType } from '../types';
 
-export const blogs: BlogType[] = []
+export let blogs: BlogType[] = []
 
 export const blogRepository = {
   getBlogs() {
     return blogs
   },
 
-  getBlogById(id: number) {
-    return blogs.find((blog) => blog.id === +id)
+  getBlogById(id: string) {
+    return blogs.find((blog) => blog.id === id)
   },
 
-  deleteVideoById(id: number) {
-    const blog = blogs.find((blog) => blog.id === +id)
+  deleteVideoById(id: string) {
+    const blog = blogs.find((blog) => blog.id === id)
     if (blog) {
       const index = blogs.indexOf(blog)
       if (index > -1) {
@@ -25,7 +25,8 @@ export const blogRepository = {
 
   createBlog(name: string, youtubeUrl: string) {
     const newBlog: BlogType = {
-      id: 0,
+      //TODO
+      id: '0',
       name,
       youtubeUrl
     }

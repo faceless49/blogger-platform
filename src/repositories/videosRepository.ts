@@ -1,6 +1,6 @@
 import { Resolutions, VideoType } from '../types';
 
-export const videos: VideoType[] = []
+export let videos: VideoType[] = []
 
 
 export const videosRepository = {

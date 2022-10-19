@@ -30,7 +30,7 @@ blogsRouter.get('/', (req: Request, res: Response) => {
 
   .get('/:id', (req: Request, res: Response) => {
     const {id} = req.params
-    const blog = blogRepository.getBlogById(+id)
+    const blog = blogRepository.getBlogById(id)
     blog ? res.send(blog) : res.sendStatus(404)
     return;
   })
@@ -42,7 +42,7 @@ blogsRouter.get('/', (req: Request, res: Response) => {
         id
       } = req.params;
       const {name, youtubeUrl} = req.body;
-      const payload: BlogType = {id: +id, name, youtubeUrl}
+      const payload: BlogType = {id, name, youtubeUrl}
 
       const isUpdated = blogRepository.updateVideoById(payload)
       isUpdated ? res.sendStatus(204) : res.send(404)
@@ -51,7 +51,7 @@ blogsRouter.get('/', (req: Request, res: Response) => {
 
   .delete('/:id', (req: Request, res: Response) => {
     const {id} = req.params
-    const isDeleted = blogRepository.deleteVideoById(+id);
+    const isDeleted = blogRepository.deleteVideoById(id);
 
     isDeleted ? res.sendStatus(204) : res.send(404)
   })
