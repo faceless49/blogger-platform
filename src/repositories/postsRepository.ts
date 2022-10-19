@@ -31,10 +31,11 @@ export const postsRepository = {
     posts.push(newPost);
     return newPost
   },
-  updatePostById(payload: PostType) {
+  updatePostById(payload: Omit<PostType, 'blogName'>) {
     let post = posts.find(post => post.id === payload.id)
     if (post) {
       post = {
+        ...post,
         ...payload
       }
       return true

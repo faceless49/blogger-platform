@@ -11,7 +11,6 @@ const titleValidation = body('title').trim().notEmpty().isString().isLength({max
 const shortDescriptionValidation = body('shortDescription').trim().notEmpty().isString().isLength({max: 100});
 const contentValidation = body('content').trim().notEmpty().isString().isLength({max: 1000});
 const blogIdValidation = body('blogId').trim().notEmpty().isString()
-const blogNameValidation = body('blogName').trim().notEmpty().isString()
 
 
 postsRouter.get('/', (req: Request, res: Response) => {
@@ -24,7 +23,7 @@ postsRouter.get('/', (req: Request, res: Response) => {
     shortDescriptionValidation,
     contentValidation,
     blogIdValidation,
-    body('blogId').custom((value, { req }) => {
+    body('blogId').custom((value, {req}) => {
       const blogger = blogRepository.getBlogById(req.body.blogId);
       if (!blogger) {
         throw new Error('Blogger not found');
@@ -54,6 +53,7 @@ postsRouter.get('/', (req: Request, res: Response) => {
   })
 
   .put('/:id',
+    authValidationMiddleware,
     inputValidationMiddleware,
     (req: Request, res: Response) => {
       const {
@@ -61,14 +61,14 @@ postsRouter.get('/', (req: Request, res: Response) => {
       } = req.params;
       const {title, shortDescription, content, blogId} = req.body;
 
-      const payload = {title, shortDescription, content, blogId}
+      const payload = {id, title, shortDescription, content, blogId}
 
-      // const isUpdated = postsRepository.updatePostById(payload)
-      // isUpdated ? res.sendStatus(204) : res.send(404)
+      const isUpdated = postsRepository.updatePostById(payload)
+      isUpdated ? res.sendStatus(204) : res.send(404)
     })
 
 
-  .delete('/:id', (req: Request, res: Response) => {
+  .delete('/:id', authValidationMiddleware, (req: Request, res: Response) => {
     const {id} = req.params
 
     const isDeleted = postsRepository.deletePostById(id);

@@ -5,7 +5,7 @@ import { inputValidationMiddleware } from '../middlewares/inputValidationMiddlew
 import { BlogType } from '../types';
 import { authValidationMiddleware } from '../middlewares/authValidationMiddleware';
 
-const youtubeRegex = new RegExp('/^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/')
+const youtubeRegex = '^https:\\/\\/([a-zA-Z0-9_-]+.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$'
 export const blogsRouter = Router({})
 
 const nameValidation = body('name').trim().notEmpty().isString().isLength({
@@ -13,7 +13,7 @@ const nameValidation = body('name').trim().notEmpty().isString().isLength({
 })
 const urlYoutubeValidation = body('youtubeUrl').trim().notEmpty().isString().isLength({
   max: 100
-}).matches(youtubeRegex)
+}).matches(youtubeRegex);
 
 
 blogsRouter.get('/', (req: Request, res: Response) => {
