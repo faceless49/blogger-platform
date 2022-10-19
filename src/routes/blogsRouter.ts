@@ -28,7 +28,7 @@ blogsRouter.get('/', (req: Request, res: Response) => {
 
       const {name, youtubeUrl} = req.body;
 
-      res.sendStatus(201).send(blogRepository.createBlog(name, youtubeUrl))
+      res.send(blogRepository.createBlog(name, youtubeUrl))
     })
 
 
@@ -36,7 +36,6 @@ blogsRouter.get('/', (req: Request, res: Response) => {
     const {id} = req.params
     const blog = blogRepository.getBlogById(id)
     blog ? res.send(blog) : res.sendStatus(404)
-    return;
   })
 
   .put('/:id',
