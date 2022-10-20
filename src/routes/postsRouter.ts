@@ -56,15 +56,8 @@ postsRouter.get('/', (req: Request, res: Response) => {
     titleValidation,
     shortDescriptionValidation,
     contentValidation,
-    inputValidationMiddleware,
     blogIdValidation,
-    body('blogId').custom((value, {req}) => {
-      const blogger = blogRepository.getBlogById(req.body.blogId);
-      if (!blogger) {
-        throw new Error('Blogger not found');
-      }
-      return true;
-    }),
+    inputValidationMiddleware,
     (req: Request, res: Response) => {
       const {
         id
