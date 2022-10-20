@@ -55,10 +55,10 @@ blogsRouter.get('/', (req: Request, res: Response) => {
     })
 
 
-  .delete('/:id', authValidationMiddleware,
+  .delete('/:id', authValidationMiddleware, inputValidationMiddleware,
     (req: Request, res: Response) => {
-      const { id } = req.params
+      const {id} = req.params
       const isDeleted = blogRepository.deleteVideoById(id);
 
-      isDeleted ? res.sendStatus(204) : res.send(404)
+      isDeleted ? res.send(204) : res.send(404)
     })
