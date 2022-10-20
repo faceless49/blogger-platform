@@ -10,7 +10,13 @@ export const postsRouter = Router({})
 const titleValidation = body('title').trim().notEmpty().isString().isLength({max: 30});
 const shortDescriptionValidation = body('shortDescription').trim().notEmpty().isString().isLength({max: 100});
 const contentValidation = body('content').trim().notEmpty().isString().isLength({max: 1000});
-const blogIdValidation = body('blogId').trim().notEmpty().isString()
+const blogIdValidation = body('blogId').trim().notEmpty().isString().custom((value, {req}) => {
+  const blogger = blogRepository.getBlogById(req.body.blogId);
+  if (!blogger) {
+    throw new Error('Blogger not found');
+  }
+  return true;
+})
 
 
 postsRouter.get('/', (req: Request, res: Response) => {
@@ -23,13 +29,6 @@ postsRouter.get('/', (req: Request, res: Response) => {
     shortDescriptionValidation,
     contentValidation,
     blogIdValidation,
-    body('blogId').custom((value, {req}) => {
-      const blogger = blogRepository.getBlogById(req.body.blogId);
-      if (!blogger) {
-        throw new Error('Blogger not found');
-      }
-      return true;
-    }),
     inputValidationMiddleware,
     (req: Request<Omit<PostType, 'id' | 'blogName'>>, res: Response) => {
 
