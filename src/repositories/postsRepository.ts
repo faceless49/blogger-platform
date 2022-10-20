@@ -26,7 +26,7 @@ export const postsRepository = {
   createPost(payload: Omit<PostType, 'id'>) {
     const newPost = {
       ...payload,
-      id: new Date().toISOString(),
+      id: Math.floor(Math.random() * 100).toString(),
     }
     posts.push(newPost);
     return newPost

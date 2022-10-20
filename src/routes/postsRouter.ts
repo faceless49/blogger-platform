@@ -39,7 +39,7 @@ postsRouter.get('/', (req: Request, res: Response) => {
         const payload = {
           title, shortDescription, content, blogName: blogger.name, blogId
         }
-        return res.sendStatus(201).send(postsRepository.createPost(payload))
+        return res.status(201).send(postsRepository.createPost(payload))
       }
       return res.send(400)
     })
