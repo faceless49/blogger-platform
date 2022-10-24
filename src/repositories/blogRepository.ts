@@ -1,47 +1,41 @@
 import { BlogType } from '../types';
+import { blogsCollection } from './db';
 
 export let blogs: BlogType[] = []
 
 export const blogRepository = {
-  getBlogs() {
-    return blogs
+  async getBlogs(): Promise<BlogType[]> {
+    return await blogsCollection.find({}).toArray()
   },
 
-  getBlogById(id: string) {
-    return blogs.find((blog) => blog.id === id)
+  async getBlogById(id: string): Promise<BlogType | null> {
+    return await blogsCollection.findOne({id});
   },
 
-  deleteVideoById(id: string) {
-    const blog = blogs.find((blog) => blog.id === id)
-    if (blog) {
-      const index = blogs.indexOf(blog)
-      if (index > -1) {
-        blogs.splice(index, 1);
-        return true
-      }
-    }
-    return false
+  async deleteVideoById(id: string): Promise<boolean> {
+    const result = await blogsCollection.deleteOne({id})
+    return result.deletedCount === 1
   },
 
-  createBlog(name: string, youtubeUrl: string) {
+  async createBlog(name: string, youtubeUrl: string): Promise<BlogType> {
     const newBlog: BlogType = {
       id: Math.floor(Math.random() * 100).toString(),
       name,
       youtubeUrl
     }
-    blogs.push(newBlog);
+    await blogsCollection.insertOne(newBlog)
     return newBlog
   },
-  updateVideoById({
+  async updateVideoById({
     id,
     name, youtubeUrl
   }: BlogType) {
-    const blog = blogs.find(blog => blog.id === id)
-    if (blog) {
-        blog.name = name;
-        blog.youtubeUrl = youtubeUrl;
-      return true
-    }
-    return false
+    const result = await blogsCollection.updateOne({id}, {
+      $set: {
+        name,
+        youtubeUrl,
+      }
+    });
+    return result.matchedCount === 1
   }
 }
