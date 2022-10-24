@@ -16,25 +16,25 @@ const urlYoutubeValidation = body('youtubeUrl').trim().notEmpty().isString().isL
 }).matches(youtubeRegex);
 
 
-blogsRouter.get('/', (req: Request, res: Response) => {
-  res.send(blogRepository.getBlogs())
+blogsRouter.get('/', async (req: Request, res: Response) => {
+  await res.send(blogRepository.getBlogs())
 })
 
   .post('/', authValidationMiddleware,
     nameValidation,
     urlYoutubeValidation,
     inputValidationMiddleware,
-    (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
 
       const {name, youtubeUrl} = req.body;
-      const response = blogRepository.createBlog(name, youtubeUrl)
+      const response = await blogRepository.createBlog(name, youtubeUrl)
       res.status(201).send(response)
     })
 
 
-  .get('/:id', (req: Request, res: Response) => {
+  .get('/:id', async (req: Request, res: Response) => {
     const {id} = req.params
-    const blog = blogRepository.getBlogById(id)
+    const blog = await blogRepository.getBlogById(id)
     blog ? res.send(blog) : res.sendStatus(404)
   })
 
@@ -43,22 +43,22 @@ blogsRouter.get('/', (req: Request, res: Response) => {
     nameValidation,
     urlYoutubeValidation,
     inputValidationMiddleware,
-    (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
       const {
         id
       } = req.params;
       const {name, youtubeUrl} = req.body;
       const payload: BlogType = {id, name, youtubeUrl}
 
-      const isUpdated = blogRepository.updateVideoById(payload)
+      const isUpdated = await blogRepository.updateVideoById(payload)
       isUpdated ? res.sendStatus(204) : res.send(404)
     })
 
 
   .delete('/:id', authValidationMiddleware, inputValidationMiddleware,
-    (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
       const {id} = req.params
-      const isDeleted = blogRepository.deleteVideoById(id);
+      const isDeleted = await blogRepository.deleteVideoById(id);
 
       isDeleted ? res.send(204) : res.send(404)
     })

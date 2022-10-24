@@ -1,45 +1,40 @@
 import { PostType } from '../types';
-
-export let posts: PostType[] = []
+import { postsCollection } from './db';
 
 export const postsRepository = {
-  getPosts() {
-    return posts
+  async getPosts(): Promise<PostType[]> {
+    return await postsCollection.find({}).toArray()
   },
 
-  getPostById(id: string) {
-    return posts.find((post) => post.id === id)
+  async getPostById(id: string): Promise<PostType | null> {
+    return await postsCollection.findOne({id});
   },
 
-  deletePostById(id: string) {
-    const post = posts.find((post) => post.id === id)
-    if (post) {
-      const index = posts.indexOf(post)
-      if (index > -1) {
-        posts.splice(index, 1);
-        return true
-      }
-    }
-    return false
+  async deletePostById(id: string): Promise<boolean> {
+    const result = await postsCollection.deleteOne({id})
+    return result.deletedCount === 1
   },
 
-  createPost(payload: Omit<PostType, 'id'>) {
+  async createPost
+  (payload: Omit<PostType, 'id'>): Promise<PostType> {
     const newPost = {
       ...payload,
       id: Math.floor(Math.random() * 100).toString(),
     }
-    posts.push(newPost);
+    await postsCollection.insertOne(newPost)
     return newPost
   },
-  updatePostById(payload: Omit<PostType, 'blogName'>) {
-    let post = posts.find(post => post.id === payload.id)
-    if (post) {
-      post.title = payload.title
-      post.shortDescription = payload.shortDescription
-      post.content = payload.content
-      post.blogId = payload.blogId
-      return true
-    }
-    return false
+
+  async updatePostById(payload: Omit<PostType, 'blogName'>): Promise<boolean> {
+
+    const result = await postsCollection.updateOne({id: payload.id}, {
+      $set: {
+        title: payload.title,
+        shortDescription: payload.shortDescription,
+        content: payload.content,
+        blogId: payload.blogId
+      }
+    });
+    return result.matchedCount === 1
   }
 }

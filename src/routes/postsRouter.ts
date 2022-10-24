@@ -30,10 +30,10 @@ postsRouter.get('/', (req: Request, res: Response) => {
     contentValidation,
     blogIdValidation,
     inputValidationMiddleware,
-    (req: Request<Omit<PostType, 'id' | 'blogName'>>, res: Response) => {
+   async (req: Request<Omit<PostType, 'id' | 'blogName'>>, res: Response) => {
 
       const {title, shortDescription, content, blogId} = req.body;
-      const blogger = blogRepository.getBlogById(blogId);
+      const blogger = await blogRepository.getBlogById(blogId);
       if (blogger) {
         const payload = {
           title, shortDescription, content, blogName: blogger.name, blogId
@@ -44,9 +44,9 @@ postsRouter.get('/', (req: Request, res: Response) => {
     })
 
 
-  .get('/:id', (req: Request, res: Response) => {
+  .get('/:id', async (req: Request, res: Response) => {
     const {id} = req.params
-    const post = postsRepository.getPostById(id)
+    const post = await postsRepository.getPostById(id)
     post ? res.send(post) : res.sendStatus(404)
     return;
   })
@@ -58,7 +58,7 @@ postsRouter.get('/', (req: Request, res: Response) => {
     contentValidation,
     blogIdValidation,
     inputValidationMiddleware,
-    (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
       const {
         id
       } = req.params;
@@ -66,15 +66,15 @@ postsRouter.get('/', (req: Request, res: Response) => {
 
       const payload = {id, title, shortDescription, content, blogId}
 
-      const isUpdated = postsRepository.updatePostById(payload)
+      const isUpdated = await postsRepository.updatePostById(payload)
       isUpdated ? res.sendStatus(204) : res.send(404)
     })
 
 
-  .delete('/:id', authValidationMiddleware, (req: Request, res: Response) => {
+  .delete('/:id', authValidationMiddleware, async (req: Request, res: Response) => {
     const {id} = req.params
 
-    const isDeleted = postsRepository.deletePostById(id);
+    const isDeleted = await postsRepository.deletePostById(id);
 
     isDeleted ? res.sendStatus(204) : res.send(404)
   })
