@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import { videosRouter } from './routes/videosRouter';
 import { blogsRouter } from './routes/blogsRouter';
 import { postsRouter } from './routes/postsRouter';
-import { runDb } from './repositories/db';
+import { blogsCollection, postsCollection, runDb } from './repositories/db';
 
 
 const app = express();
@@ -20,8 +20,8 @@ app.get('/', (req: Request, res: Response) => {
 
 
 app.delete('/testing/all-data', async (req: Request, res: Response) => {
-  // await blogsCollection.deleteMany({})
-  // await postsCollection.deleteMany({})
+  await blogsCollection.deleteMany({})
+  await postsCollection.deleteMany({})
   res.sendStatus(204)
 })
 

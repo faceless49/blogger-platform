@@ -11,8 +11,6 @@ export const videosCollection = db.collection<VideoType>('videos')
 
 export async function runDb() {
   console.log('run DB')
-  console.log(process.env.PORT)
-  console.log(process.env.MONGO_URI)
   try {
     await client.connect()
     console.log('Connected success to mongo server');

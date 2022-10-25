@@ -1,13 +1,13 @@
 import { PostType } from '../types';
-import { postsCollection } from './db';
+import { blogsCollection, postsCollection } from './db';
 
 export const postsRepository = {
   async getPosts(): Promise<PostType[]> {
-    return await postsCollection.find({}).toArray()
+    return await postsCollection.find({},{projection: {_id: 0}}).toArray()
   },
 
   async getPostById(id: string): Promise<PostType | null> {
-    return await postsCollection.findOne({id});
+    return await postsCollection.findOne({id},{projection: {_id: 0}});
   },
 
   async deletePostById(id: string): Promise<boolean> {
@@ -16,14 +16,14 @@ export const postsRepository = {
   },
 
   async createPost
-  (payload: Omit<PostType, 'id' | 'createdAt'>): Promise<PostType> {
+  (payload: Omit<PostType, 'id' | 'createdAt'>): Promise<PostType | null> {
     const newPost = {
       ...payload,
       id: Math.floor(Math.random() * 100).toString(),
       createdAt: new Date().toISOString(),
     }
     await postsCollection.insertOne(newPost)
-    return newPost
+    return await postsCollection.findOne({id: newPost.id}, {projection: {_id: 0}})
   },
 
   async updatePostById(payload: Omit<PostType, 'blogName' | "createdAt">): Promise<boolean> {
