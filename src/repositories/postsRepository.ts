@@ -1,13 +1,13 @@
 import { PostType } from '../types';
-import { blogsCollection, postsCollection } from './db';
+import { postsCollection } from './db';
 
 export const postsRepository = {
   async getPosts(): Promise<PostType[]> {
-    return await postsCollection.find({},{projection: {_id: 0}}).toArray()
+    return await postsCollection.find({}, {projection: {_id: 0}}).toArray()
   },
 
   async getPostById(id: string): Promise<PostType | null> {
-    return await postsCollection.findOne({id},{projection: {_id: 0}});
+    return await postsCollection.findOne({id}, {projection: {_id: 0}});
   },
 
   async deletePostById(id: string): Promise<boolean> {
@@ -15,8 +15,7 @@ export const postsRepository = {
     return result.deletedCount === 1
   },
 
-  async createPost
-  (payload: Omit<PostType, 'id' | 'createdAt'>): Promise<PostType | null> {
+  async createPost(payload: Omit<PostType, 'id' | 'createdAt'>): Promise<PostType | null> {
     const newPost = {
       ...payload,
       id: Math.floor(Math.random() * 100).toString(),
@@ -26,7 +25,7 @@ export const postsRepository = {
     return await postsCollection.findOne({id: newPost.id}, {projection: {_id: 0}})
   },
 
-  async updatePostById(payload: Omit<PostType, 'blogName' | "createdAt">): Promise<boolean> {
+  async updatePostById(payload: Omit<PostType, 'blogName' | 'createdAt'>): Promise<boolean> {
 
     const result = await postsCollection.updateOne({id: payload.id}, {
       $set: {
