@@ -17,7 +17,8 @@ const urlYoutubeValidation = body('youtubeUrl').trim().notEmpty().isString().isL
 
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-  await res.send(blogRepository.getBlogs())
+  const result = await blogRepository.getBlogs()
+  res.send(result)
 })
 
   .post('/', authValidationMiddleware,
@@ -48,7 +49,7 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
         id
       } = req.params;
       const {name, youtubeUrl} = req.body;
-      const payload: BlogType = {id, name, youtubeUrl}
+      const payload: Omit<BlogType, "createdAt"> = {id, name, youtubeUrl}
 
       const isUpdated = await blogRepository.updateVideoById(payload)
       isUpdated ? res.sendStatus(204) : res.send(404)

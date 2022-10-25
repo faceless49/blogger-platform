@@ -6,7 +6,7 @@ import { runDb } from './repositories/db';
 
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -19,7 +19,9 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 
-app.delete('/testing/all-data', (req: Request, res: Response) => {
+app.delete('/testing/all-data', async (req: Request, res: Response) => {
+  // await blogsCollection.deleteMany({})
+  // await postsCollection.deleteMany({})
   res.sendStatus(204)
 })
 

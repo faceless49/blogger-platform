@@ -1,11 +1,9 @@
 import { BlogType } from '../types';
 import { blogsCollection } from './db';
 
-export let blogs: BlogType[] = []
-
 export const blogRepository = {
   async getBlogs(): Promise<BlogType[]> {
-    return await blogsCollection.find({}).toArray()
+    return blogsCollection.find({}).toArray();
   },
 
   async getBlogById(id: string): Promise<BlogType | null> {
@@ -20,8 +18,9 @@ export const blogRepository = {
   async createBlog(name: string, youtubeUrl: string): Promise<BlogType> {
     const newBlog: BlogType = {
       id: Math.floor(Math.random() * 100).toString(),
+      createdAt: new Date().toISOString(),
       name,
-      youtubeUrl
+      youtubeUrl,
     }
     await blogsCollection.insertOne(newBlog)
     return newBlog
@@ -29,7 +28,7 @@ export const blogRepository = {
   async updateVideoById({
     id,
     name, youtubeUrl
-  }: BlogType) {
+  }: Omit<BlogType, "createdAt">) {
     const result = await blogsCollection.updateOne({id}, {
       $set: {
         name,

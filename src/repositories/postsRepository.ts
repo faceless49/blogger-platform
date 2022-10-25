@@ -16,16 +16,17 @@ export const postsRepository = {
   },
 
   async createPost
-  (payload: Omit<PostType, 'id'>): Promise<PostType> {
+  (payload: Omit<PostType, 'id' | 'createdAt'>): Promise<PostType> {
     const newPost = {
       ...payload,
       id: Math.floor(Math.random() * 100).toString(),
+      createdAt: new Date().toISOString(),
     }
     await postsCollection.insertOne(newPost)
     return newPost
   },
 
-  async updatePostById(payload: Omit<PostType, 'blogName'>): Promise<boolean> {
+  async updatePostById(payload: Omit<PostType, 'blogName' | "createdAt">): Promise<boolean> {
 
     const result = await postsCollection.updateOne({id: payload.id}, {
       $set: {

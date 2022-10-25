@@ -13,14 +13,16 @@ export type BlogType = {
   id: string,
   name: string,
   youtubeUrl: string
+  createdAt: string
 }
-export type PostType =  {
+export type PostType = {
   id: string,
   title: string,
   shortDescription: string,
   content: string,
   blogId: string,
   blogName: string
+  createdAt: string
 }
 
 export const enum Resolutions {
