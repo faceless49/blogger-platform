@@ -1,5 +1,5 @@
-import { PostType } from '../types';
-import { postsCollection } from './db';
+import {PostType} from '../types';
+import {postsCollection} from './db';
 
 export const postsRepository = {
   async getPosts(): Promise<PostType[]> {
@@ -15,14 +15,9 @@ export const postsRepository = {
     return result.deletedCount === 1
   },
 
-  async createPost(payload: Omit<PostType, 'id' | 'createdAt'>): Promise<PostType | null> {
-    const newPost = {
-      ...payload,
-      id: Math.floor(Math.random() * 100).toString(),
-      createdAt: new Date().toISOString(),
-    }
-    await postsCollection.insertOne(newPost)
-    return await postsCollection.findOne({id: newPost.id}, {projection: {_id: 0}})
+  async createPost(payload: PostType): Promise<PostType | null> {
+    await postsCollection.insertOne(payload)
+    return await postsCollection.findOne({id: payload.id}, {projection: {_id: 0}})
   },
 
   async updatePostById(payload: Omit<PostType, 'blogName' | 'createdAt'>): Promise<boolean> {

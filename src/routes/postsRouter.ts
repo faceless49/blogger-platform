@@ -1,17 +1,18 @@
-import { Request, Response, Router } from 'express';
-import { body } from 'express-validator';
-import { blogRepository } from '../repositories/blogRepository';
-import { inputValidationMiddleware } from '../middlewares/inputValidationMiddleware';
-import { PostType } from '../types';
-import { postsRepository } from '../repositories/postsRepository';
-import { authValidationMiddleware } from '../middlewares/authValidationMiddleware';
+import {Request, Response, Router} from 'express';
+import {body} from 'express-validator';
+import {blogRepository} from '../repositories/blogRepository';
+import {inputValidationMiddleware} from '../middlewares/inputValidationMiddleware';
+import {PostType} from '../types';
+import {authValidationMiddleware} from '../middlewares/authValidationMiddleware';
+import {postsService} from '../domain/posts-service';
+import {blogsService} from '../domain/blogs-service';
 
 export const postsRouter = Router({})
 const titleValidation = body('title').trim().notEmpty().isString().isLength({max: 30});
 const shortDescriptionValidation = body('shortDescription').trim().notEmpty().isString().isLength({max: 100});
 const contentValidation = body('content').trim().notEmpty().isString().isLength({max: 1000});
 const blogIdValidation = body('blogId').trim().notEmpty().isString().custom(async (value, {req}) => {
-  const blogger = await blogRepository.getBlogById(req.body.blogId);
+  const blogger = await blogsService.getBlogById(req.body.blogId);
   if (!blogger) {
     throw new Error('Blogger not found');
   }
@@ -20,7 +21,7 @@ const blogIdValidation = body('blogId').trim().notEmpty().isString().custom(asyn
 
 
 postsRouter.get('/', async (req: Request, res: Response) => {
-  const posts = await postsRepository.getPosts()
+  const posts = await postsService.getPosts()
   res.send(posts)
 })
 
@@ -39,7 +40,7 @@ postsRouter.get('/', async (req: Request, res: Response) => {
         const payload = {
           title, shortDescription, content, blogName: blogger.name, blogId
         }
-        const result = await postsRepository.createPost(payload)
+        const result = await postsService.createPost(payload)
         return res.status(201).send(result)
       }
       return res.send(400)
@@ -48,7 +49,7 @@ postsRouter.get('/', async (req: Request, res: Response) => {
 
   .get('/:id', async (req: Request, res: Response) => {
     const {id} = req.params
-    const post = await postsRepository.getPostById(id)
+    const post = await postsService.getPostById(id)
     post ? res.send(post) : res.sendStatus(404)
     return;
   })
@@ -68,7 +69,7 @@ postsRouter.get('/', async (req: Request, res: Response) => {
 
       const payload = {id, title, shortDescription, content, blogId}
 
-      const isUpdated = await postsRepository.updatePostById(payload)
+      const isUpdated = await postsService.updatePostById(payload)
       isUpdated ? res.sendStatus(204) : res.send(404)
     })
 
@@ -76,7 +77,7 @@ postsRouter.get('/', async (req: Request, res: Response) => {
   .delete('/:id', authValidationMiddleware, async (req: Request, res: Response) => {
     const {id} = req.params
 
-    const isDeleted = await postsRepository.deletePostById(id);
+    const isDeleted = await postsService.deletePostById(id);
 
     isDeleted ? res.sendStatus(204) : res.send(404)
   })
