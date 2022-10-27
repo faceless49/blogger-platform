@@ -1,9 +1,18 @@
 import {PostType} from '../types';
 import {postsRepository} from '../repositories/postsRepository';
+import {RequestQueryType} from '../helpers/getPaginationData';
+
+export type PostsOutputViewModel = {
+  pagesCount: number,
+  page: number,
+  pageSize: number,
+  totalCount: number,
+  items: PostType[]
+}
 
 export const postsService = {
-  async getPosts(): Promise<PostType[]> {
-    return await postsRepository.getPosts();
+  async getPosts(reqParams: RequestQueryType): Promise<PostsOutputViewModel> {
+    return await postsRepository.getPosts(reqParams);
   },
 
   async getPostById(id: string): Promise<PostType | null> {

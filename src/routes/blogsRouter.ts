@@ -1,9 +1,9 @@
-import { Request, Response, Router } from 'express';
-import { body } from 'express-validator';
-import { blogsService } from '../domain/blogs-service';
-import { inputValidationMiddleware } from '../middlewares/inputValidationMiddleware';
-import { BlogType } from '../types';
-import { authValidationMiddleware } from '../middlewares/authValidationMiddleware';
+import {Request, Response, Router} from 'express';
+import {body} from 'express-validator';
+import {blogsService} from '../domain/blogs-service';
+import {BlogType} from '../types';
+import {authValidationMiddleware, inputValidationMiddleware} from './../middlewares';
+
 
 const youtubeRegex = '^https:\\/\\/([a-zA-Z0-9_-]+.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$'
 export const blogsRouter = Router({})
@@ -49,7 +49,7 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
         id
       } = req.params;
       const {name, youtubeUrl} = req.body;
-      const payload: Omit<BlogType, "createdAt"> = {id, name, youtubeUrl}
+      const payload: Omit<BlogType, 'createdAt'> = {id, name, youtubeUrl}
 
       const isUpdated = await blogsService.updateVideoById(payload)
       isUpdated ? res.sendStatus(204) : res.send(404)

@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express'
-import { videosRouter } from './routes/videosRouter';
-import { blogsRouter } from './routes/blogsRouter';
-import { postsRouter } from './routes/postsRouter';
-import { blogsCollection, postsCollection, runDb } from './repositories/db';
+import express, {Request, Response} from 'express'
+import {blogsRouter} from './routes/blogsRouter';
+import {blogsCollection, postsCollection, runDb} from './repositories/db';
+import {postsRouter} from './routes/postsRouter';
+import {videosRouter} from './routes/videosRouter';
 
 
 const app = express();

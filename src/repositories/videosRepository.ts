@@ -1,4 +1,4 @@
-import { Resolutions, VideoType } from '../types';
+import {Resolutions, VideoType} from '../types';
 
 export let videos: VideoType[] = []
 

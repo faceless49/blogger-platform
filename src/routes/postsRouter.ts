@@ -6,6 +6,8 @@ import {PostType} from '../types';
 import {authValidationMiddleware} from '../middlewares/authValidationMiddleware';
 import {postsService} from '../domain/posts-service';
 import {blogsService} from '../domain/blogs-service';
+import {getPaginationData} from '../helpers/getPaginationData';
+
 
 export const postsRouter = Router({})
 const titleValidation = body('title').trim().notEmpty().isString().isLength({max: 30});
@@ -21,7 +23,8 @@ const blogIdValidation = body('blogId').trim().notEmpty().isString().custom(asyn
 
 
 postsRouter.get('/', async (req: Request, res: Response) => {
-  const posts = await postsService.getPosts()
+  const reqParams = getPaginationData(req.query)
+  const posts = await postsService.getPosts(reqParams)
   res.send(posts)
 })
 
