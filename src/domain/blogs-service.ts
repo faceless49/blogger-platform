@@ -1,19 +1,42 @@
-import {BlogType} from '../types';
-import {blogRepository} from '../repositories/blogRepository';
+import { BlogType, PostType } from '../types';
+import { blogRepository } from '../repositories/blogRepository';
+import { blogQueryRepository } from '../repositories/blogQueryRepository';
+import { RequestQueryType } from '../helpers/getPaginationData';
+import { postsRepository } from '../repositories/postsRepository';
 // * No DB actions
 
-
+export type BlogsOutputViewModel = {
+  pagesCount: number;
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  items: BlogType[];
+};
+export type PostsOutputViewModel = {
+  pagesCount: number;
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  items: PostType[];
+};
 export const blogsService = {
-  async getBlogs(): Promise<BlogType[]> {
-    return blogRepository.getBlogs()
+  async getBlogs(reqParams: RequestQueryType): Promise<BlogsOutputViewModel> {
+    return blogQueryRepository.getBlogs(reqParams);
   },
 
   async getBlogById(id: string): Promise<BlogType | null> {
-    return await blogRepository.getBlogById(id);
+    return await blogQueryRepository.getBlogById(id);
+  },
+
+  async getPostsByBlogId(
+    reqParams: RequestQueryType,
+    id: string,
+  ): Promise<PostsOutputViewModel | null> {
+    return await blogQueryRepository.getPostsByBlogId(reqParams, id);
   },
 
   async deleteVideoById(id: string): Promise<boolean> {
-    return await blogRepository.deleteVideoById(id)
+    return await blogRepository.deleteVideoById(id);
   },
 
   async createBlog(name: string, youtubeUrl: string): Promise<BlogType | null> {
@@ -22,13 +45,30 @@ export const blogsService = {
       createdAt: new Date().toISOString(),
       name,
       youtubeUrl,
-    }
-    return await blogRepository.createBlog(newBlog)
+    };
+    return await blogRepository.createBlog(newBlog);
   },
-  async updateVideoById({
-    id,
-    name, youtubeUrl
-  }: Omit<BlogType, 'createdAt'>) {
-    return await blogRepository.updateVideoById({id, name, youtubeUrl});
-  }
-}
+
+  async updateVideoById({ id, name, youtubeUrl }: Omit<BlogType, 'createdAt'>) {
+    return await blogRepository.updateVideoById({ id, name, youtubeUrl });
+  },
+
+  async createPostByBlogId(
+    blog: BlogType,
+    title: string,
+    shortDescription: string,
+    content: string,
+  ): Promise<PostType | null> {
+    const newPost = {
+      title,
+      shortDescription,
+      content,
+      id: Math.floor(Math.random() * 100).toString(),
+      createdAt: new Date().toISOString(),
+      blogId: blog.id,
+      blogName: blog.name,
+    };
+    await postsRepository.createPost(newPost);
+    return newPost;
+  },
+};
