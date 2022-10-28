@@ -1,32 +1,33 @@
 type RequestUrlQueryType = {
-  PageNumber?: string | number
-  PageSize?: string | number
-  SearchNameTerm?: string | null
-  sortBy?: string
-  sortDirection?: 'asc' | 'desc'
-}
+  PageNumber?: string | number;
+  PageSize?: string | number;
+  searchNameTerm?: string | null;
+  sortBy?: string;
+  sortDirection?: 'asc' | 'desc';
+};
 
 export type RequestQueryType = {
-  page: number
-  pageSize: number
-  searchNameTerm: string | null
-  sortBy: string
-  sortDirection: 'asc' | 'desc'
-}
-
+  page: number;
+  pageSize: number;
+  searchNameTerm: string | null;
+  sortBy: string;
+  sortDirection: 'asc' | 'desc';
+};
 
 export const getPaginationData = ({
   PageNumber = 1,
   PageSize = 10,
-  SearchNameTerm = null,
+  searchNameTerm = null,
   sortBy = 'createdAt',
-  sortDirection = 'desc'
+  sortDirection = 'desc',
 }: RequestUrlQueryType): RequestQueryType => {
-  const page = +PageNumber
-  const pageSize = +PageSize
-  const searchNameTerm = SearchNameTerm
+  const page = +PageNumber;
+  const pageSize = +PageSize;
   return {
-    page, pageSize, searchNameTerm, sortBy,
-    sortDirection
-  }
-}
+    page,
+    pageSize,
+    searchNameTerm,
+    sortBy,
+    sortDirection,
+  };
+};
