@@ -6,7 +6,7 @@ import { BlogsOutputViewModel, PostsOutputViewModel } from '../domain/blogs-serv
 export const blogQueryRepository = {
   async getBlogs(reqParams: RequestQueryType): Promise<BlogsOutputViewModel> {
     const { searchNameTerm, sortBy, sortDirection, pageSize, page } = reqParams;
-    const filter = { name: { $regex: searchNameTerm ? searchNameTerm : '' } };
+    const filter = { blogName: { $regex: searchNameTerm ? searchNameTerm : '' } };
     const blogs = await blogsCollection
       .find(filter, { projection: { _id: 0 } })
       .sort(sortBy, sortDirection)
