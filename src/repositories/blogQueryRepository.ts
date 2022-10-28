@@ -12,6 +12,8 @@ export const blogQueryRepository = {
     const blogs = await blogsCollection
       .find(filter, { projection: { _id: 0 } })
       .sort(sortBy, sortDirection)
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
       .toArray();
 
     const totalCount = blogs.length;
@@ -36,6 +38,8 @@ export const blogQueryRepository = {
     const posts = await postsCollection
       .find({ blogId: id }, { projection: { _id: 0 } })
       .sort(sortBy, sortDirection)
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
       .toArray();
     const totalCount = posts.length;
     const pagesCount = Math.ceil(totalCount / pageSize);
