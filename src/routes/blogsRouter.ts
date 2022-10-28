@@ -109,7 +109,7 @@ blogsRouter
       return;
     }
     const postsOutput = await blogsService.getPostsByBlogId(reqParams, blog!.id);
-    postsOutput ? res.send(postsOutput) : res.sendStatus(404);
+    postsOutput ? res.send(postsOutput) : res.send(404);
   })
 
   .put(
