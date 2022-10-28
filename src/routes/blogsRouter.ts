@@ -44,7 +44,7 @@ const blogParamsValidation = param('id')
   .custom(async (value, { req }) => {
     const blogger = await blogsService.getBlogById(req?.params?.id);
     if (!blogger) {
-      throw new Error('Blogger not found');
+      return 404;
     }
     return true;
   });
@@ -72,10 +72,10 @@ blogsRouter
   .post(
     '/:id/posts',
     authValidationMiddleware,
+    blogParamsValidation,
     contentValidation,
     titleValidation,
     shortDescriptionValidation,
-    blogParamsValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
       const { id } = req.params;
@@ -101,6 +101,10 @@ blogsRouter
     const { id } = req.params;
     const reqParams = getPaginationData(req.query);
     const blog = await blogsService.getBlogById(id);
+    if (!blog) {
+      res.send(404);
+      return;
+    }
     const postsOutput = await blogsService.getPostsByBlogId(reqParams, blog!.id);
     postsOutput ? res.send(postsOutput) : res.sendStatus(404);
   })

@@ -68,7 +68,6 @@ export const blogsService = {
       blogId: blog.id,
       blogName: blog.name,
     };
-    await postsRepository.createPost(newPost);
-    return newPost;
+    return await postsRepository.createPost(newPost);
   },
 };

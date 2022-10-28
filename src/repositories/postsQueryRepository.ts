@@ -11,7 +11,6 @@ export const postsQueryRepository = {
       .find(filter, { projection: { _id: 0 } })
       .sort(sortBy, sortDirection)
       .toArray();
-    debugger;
     const totalCount = posts.length;
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
