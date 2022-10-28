@@ -15,7 +15,7 @@ export const postsQueryRepository = {
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .toArray();
-    const totalCount = posts.length;
+    const totalCount = (await postsCollection.find(filter).toArray()).length;
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
       pagesCount,

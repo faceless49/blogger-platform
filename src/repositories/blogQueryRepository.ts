@@ -16,7 +16,7 @@ export const blogQueryRepository = {
       .limit(pageSize)
       .toArray();
 
-    const totalCount = blogs.length;
+    const totalCount = (await blogsCollection.find(filter).toArray()).length;
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
       pagesCount,
@@ -34,14 +34,15 @@ export const blogQueryRepository = {
     reqParams: RequestQueryType,
     id: string,
   ): Promise<PostsOutputViewModel | null> {
-    const { sortBy, sortDirection, pageSize, page } = reqParams;
+    const { sortBy, sortDirection, pageSize, page, searchNameTerm } = reqParams;
     const posts = await postsCollection
       .find({ blogId: id }, { projection: { _id: 0 } })
       .sort(sortBy, sortDirection)
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .toArray();
-    const totalCount = posts.length;
+    const totalCount = (await postsCollection.find({}).toArray()).length;
+
     const pagesCount = Math.ceil(totalCount / pageSize);
 
     return {
