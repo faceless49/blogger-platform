@@ -35,8 +35,11 @@ export const blogQueryRepository = {
     id: string,
   ): Promise<PostsOutputViewModel | null> {
     const { sortBy, sortDirection, pageSize, page, searchNameTerm } = reqParams;
+    const filter = {
+      blogName: { $regex: searchNameTerm ? searchNameTerm : '', $options: 'i' },
+    };
     const posts = await postsCollection
-      .find({ blogId: id }, { projection: { _id: 0 } })
+      .find({ blogId: id, filter }, { projection: { _id: 0 } })
       .sort(sortBy, sortDirection)
       .skip((page - 1) * pageSize)
       .limit(pageSize)
