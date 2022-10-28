@@ -1,6 +1,6 @@
 type RequestUrlQueryType = {
-  PageNumber?: string | number;
-  PageSize?: string | number;
+  pageNumber?: string | number;
+  pageSize?: string | number;
   searchNameTerm?: string | null;
   sortBy?: string;
   sortDirection?: 'asc' | 'desc';
@@ -15,14 +15,14 @@ export type RequestQueryType = {
 };
 
 export const getPaginationData = ({
-  PageNumber = 1,
-  PageSize = 10,
+  pageNumber = 1,
+  pageSize = 10,
   searchNameTerm = null,
   sortBy = 'createdAt',
   sortDirection = 'desc',
 }: RequestUrlQueryType): RequestQueryType => {
-  const page = +PageNumber;
-  const pageSize = +PageSize;
+  const page = +pageNumber;
+  pageSize = +pageSize;
   return {
     page,
     pageSize,
