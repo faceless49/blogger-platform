@@ -81,6 +81,9 @@ blogsRouter
       const { id } = req.params;
       const { title, shortDescription, content } = req.body;
       const blog = await blogsService.getBlogById(id);
+      if (!blog) {
+        return res.send(404);
+      }
       const response = await blogsService.createPostByBlogId(
         blog!,
         title,

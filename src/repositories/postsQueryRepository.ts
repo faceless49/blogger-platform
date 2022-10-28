@@ -6,7 +6,9 @@ import { RequestQueryType } from '../helpers/getPaginationData';
 export const postsQueryRepository = {
   async getPosts(reqParams: RequestQueryType): Promise<PostsOutputViewModel> {
     const { searchNameTerm, sortBy, sortDirection, pageSize, page } = reqParams;
-    const filter = { blogName: { $regex: searchNameTerm ? searchNameTerm : '' } };
+    const filter = {
+      blogName: { $regex: searchNameTerm ? searchNameTerm : '', $options: 'i' },
+    };
     const posts = await postsCollection
       .find(filter, { projection: { _id: 0 } })
       .sort(sortBy, sortDirection)
