@@ -4,6 +4,11 @@ import { blogsService } from '../domain/blogs-service';
 import { BlogType } from '../types';
 import { authValidationMiddleware, inputValidationMiddleware } from '../middlewares';
 import { getPaginationData } from '../helpers';
+import {
+  contentValidation,
+  shortDescriptionValidation,
+  titleValidation,
+} from './postsRouter';
 
 const youtubeRegex =
   '^https:\\/\\/([a-zA-Z0-9_-]+.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$';
@@ -67,8 +72,9 @@ blogsRouter
   .post(
     '/:id/posts',
     authValidationMiddleware,
-    nameValidation,
-    urlYoutubeValidation,
+    contentValidation,
+    titleValidation,
+    shortDescriptionValidation,
     blogParamsValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {

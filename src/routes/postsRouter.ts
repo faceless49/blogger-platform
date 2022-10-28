@@ -8,18 +8,22 @@ import { getPaginationData } from '../helpers';
 import { blogQueryRepository } from '../repositories/blogQueryRepository';
 
 export const postsRouter = Router({});
-const titleValidation = body('title').trim().notEmpty().isString().isLength({ max: 30 });
-const shortDescriptionValidation = body('shortDescription')
+export const titleValidation = body('title')
+  .trim()
+  .notEmpty()
+  .isString()
+  .isLength({ max: 30 });
+export const shortDescriptionValidation = body('shortDescription')
   .trim()
   .notEmpty()
   .isString()
   .isLength({ max: 100 });
-const contentValidation = body('content')
+export const contentValidation = body('content')
   .trim()
   .notEmpty()
   .isString()
   .isLength({ max: 1000 });
-const blogIdValidation = body('blogId')
+export const blogIdValidation = body('blogId')
   .trim()
   .notEmpty()
   .isString()
