@@ -34,7 +34,7 @@ export const blogQueryRepository = {
     reqParams: RequestQueryType,
     id: string,
   ): Promise<PostsOutputViewModel | null> {
-    const { sortBy, sortDirection, pageSize, page, searchNameTerm } = reqParams;
+    const { sortBy, sortDirection, pageSize, page } = reqParams;
     const posts = await postsCollection
       .find({ blogId: id }, { projection: { _id: 0 } })
       .sort(sortBy, sortDirection)
