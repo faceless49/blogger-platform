@@ -17,8 +17,11 @@ export const getSortedItems = <T>(items: T[], ...sortBy: SortByType<T>[]) => {
   });
 };
 
-export const getSortDirection = (sortDirection: string) => {
-  if (sortDirection === 'asc') return 1;
-  if (sortDirection === 'desc') return -1;
-  return 0;
+export const getSortDirection = (sortBy: string, sortDirection: string | number) => {
+  if (sortDirection === 'asc') sortDirection = 1;
+  if (sortDirection === 'desc') sortDirection = -1;
+
+  return {
+    [sortBy]: sortDirection,
+  };
 };
