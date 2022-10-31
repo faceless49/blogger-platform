@@ -23,7 +23,7 @@ export const getPaginationData = ({
 }: RequestUrlQueryType): RequestQueryType => {
   const page = +pageNumber;
   pageSize = +pageSize;
-  sortDirection === 'asc' ? (sortDirection = 1) : (sortDirection = -1);
+  // sortDirection === 'asc' ? (sortDirection = 1) : (sortDirection = -1);
   return {
     page,
     pageSize,
