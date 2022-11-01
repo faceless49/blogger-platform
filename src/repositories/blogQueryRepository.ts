@@ -13,7 +13,7 @@ export const blogQueryRepository = {
       .find(filter, { projection: { _id: 0 } })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
-      .sort(sortBy, sortDirection)
+      .sort({ [sortBy]: sortDirection })
       .toArray();
 
     const totalCount = (await blogsCollection.find(filter).toArray()).length;
@@ -35,11 +35,12 @@ export const blogQueryRepository = {
     id: string,
   ): Promise<PostsOutputViewModel | null> {
     const { sortBy, sortDirection, pageSize, page } = reqParams;
+    console.log(reqParams);
     const posts = await postsCollection
       .find({ blogId: id }, { projection: { _id: 0 } })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
-      .sort(sortBy, sortDirection)
+      .sort({ [sortBy]: sortDirection })
       .toArray();
     const totalCount = (await postsCollection.find({ blogId: id }).toArray()).length;
 
