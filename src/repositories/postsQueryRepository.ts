@@ -5,18 +5,15 @@ import { RequestQueryType } from '../helpers/getPaginationData';
 
 export const postsQueryRepository = {
   async getPosts(reqParams: RequestQueryType): Promise<PostsOutputViewModel> {
-    const { searchNameTerm, sortBy, sortDirection, pageSize, page } = reqParams;
-    const filter = {
-      blogName: { $regex: searchNameTerm ? searchNameTerm : '', $options: 'i' },
-    };
+    const { sortBy, sortDirection, pageSize, page } = reqParams;
     const posts = await postsCollection
-      .find(filter, { projection: { _id: 0 } })
+      .find({}, { projection: { _id: 0 } })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .sort({ [sortBy]: sortDirection })
       .toArray();
 
-    const totalCount = (await postsCollection.find(filter).toArray()).length;
+    const totalCount = (await postsCollection.find({}).toArray()).length;
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
       pagesCount,
