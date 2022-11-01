@@ -41,7 +41,7 @@ export const blogsService = {
 
   async createBlog(name: string, youtubeUrl: string): Promise<BlogType | null> {
     const newBlog: BlogType = {
-      id: Math.floor(Math.random() * 100).toString(),
+      id: new Date().toString(),
       createdAt: new Date().toISOString(),
       name,
       youtubeUrl,

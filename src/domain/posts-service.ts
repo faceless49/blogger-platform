@@ -29,7 +29,7 @@ export const postsService = {
   ): Promise<PostType | null> {
     const newPost = {
       ...payload,
-      id: Math.floor(Math.random() * 100).toString(),
+      id: new Date().toString(),
       createdAt: new Date().toISOString(),
     };
     return await postsRepository.createPost(newPost);
