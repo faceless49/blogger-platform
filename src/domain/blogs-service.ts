@@ -3,6 +3,7 @@ import { blogRepository } from '../repositories/blogRepository';
 import { blogQueryRepository } from '../repositories/blogQueryRepository';
 import { RequestQueryType } from '../helpers/getPaginationData';
 import { postsRepository } from '../repositories/postsRepository';
+import { v1 } from 'uuid';
 // * No DB actions
 
 export type BlogsOutputViewModel = {
@@ -41,7 +42,7 @@ export const blogsService = {
 
   async createBlog(name: string, youtubeUrl: string): Promise<BlogType | null> {
     const newBlog: BlogType = {
-      id: new Date().toString(),
+      id: v1(),
       createdAt: new Date().toISOString(),
       name,
       youtubeUrl,
@@ -63,7 +64,7 @@ export const blogsService = {
       title,
       shortDescription,
       content,
-      id: new Date().toString(),
+      id: v1(),
       createdAt: new Date().toISOString(),
       blogId: blog.id,
       blogName: blog.name,

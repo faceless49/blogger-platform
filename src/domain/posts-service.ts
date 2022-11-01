@@ -2,6 +2,7 @@ import { PostType } from '../types';
 import { postsRepository } from '../repositories/postsRepository';
 import { RequestQueryType } from '../helpers/getPaginationData';
 import { postsQueryRepository } from '../repositories/postsQueryRepository';
+import { v1 } from 'uuid';
 
 export type PostsOutputViewModel = {
   pagesCount: number;
@@ -29,7 +30,7 @@ export const postsService = {
   ): Promise<PostType | null> {
     const newPost = {
       ...payload,
-      id: new Date().toString(),
+      id: v1(),
       createdAt: new Date().toISOString(),
     };
     return await postsRepository.createPost(newPost);
