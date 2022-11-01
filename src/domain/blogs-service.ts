@@ -63,7 +63,7 @@ export const blogsService = {
       title,
       shortDescription,
       content,
-      id: Math.floor(Math.random() * 100).toString(),
+      id: new Date().toString(),
       createdAt: new Date().toISOString(),
       blogId: blog.id,
       blogName: blog.name,
