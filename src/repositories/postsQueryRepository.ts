@@ -11,9 +11,9 @@ export const postsQueryRepository = {
     };
     const posts = await postsCollection
       .find(filter, { projection: { _id: 0 } })
-      .sort([sortBy, `${sortDirection}`])
       .skip((page - 1) * pageSize)
       .limit(pageSize)
+      .sort([sortBy, `${sortDirection}`])
       .toArray();
 
     const totalCount = (await postsCollection.find(filter).toArray()).length;
