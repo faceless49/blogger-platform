@@ -43,7 +43,7 @@ export const blogQueryRepository = {
       .limit(pageSize)
       .sort({ [sortBy]: sortDirection })
       .toArray();
-    const totalCount = (await postsCollection.find({ blogId: id }).toArray()).length;
+    const totalCount = await postsCollection.countDocuments({ blogId: id });
 
     const pagesCount = Math.ceil(totalCount / pageSize);
 
