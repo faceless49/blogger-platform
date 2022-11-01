@@ -11,8 +11,8 @@ export const postsQueryRepository = {
     };
     const posts = await postsCollection
       .find(filter, { projection: { _id: 0 } })
-      .limit(pageSize)
       .skip((page - 1) * pageSize)
+      .limit(pageSize)
       .sort(sortBy, sortDirection)
       .toArray();
 
