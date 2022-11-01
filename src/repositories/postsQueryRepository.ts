@@ -6,6 +6,7 @@ import { RequestQueryType } from '../helpers/getPaginationData';
 export const postsQueryRepository = {
   async getPosts(reqParams: RequestQueryType): Promise<PostsOutputViewModel> {
     const { sortBy, sortDirection, pageSize, page } = reqParams;
+    console.log(reqParams);
     const posts = await postsCollection
       .find({}, { projection: { _id: 0 } })
       .skip((page - 1) * pageSize)
