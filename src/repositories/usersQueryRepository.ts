@@ -14,12 +14,14 @@ export const usersQueryRepository = {
   async getUsers(reqParams: RequestQueryType): Promise<UsersOutputViewModel> {
     const { sortBy, sortDirection, pageSize, page, searchEmailTerm, searchLoginTerm } =
       reqParams;
-
+    const filter = {
+      $or: [
+        { login: { $regex: searchLoginTerm } },
+        { email: { $regex: searchEmailTerm } },
+      ],
+    };
     const users = await usersCollection
-      .find(
-        { $or: [{ login: searchLoginTerm }, { email: searchEmailTerm }] },
-        { projection: { _id: 0 } },
-      )
+      .find(filter, { projection: { _id: 0 } })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .sort({ [sortBy]: sortDirection })

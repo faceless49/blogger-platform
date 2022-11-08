@@ -8,12 +8,13 @@ const loginValidation = body('login').trim().notEmpty().isString();
 const passValidation = body('password').trim().notEmpty().isString();
 
 authRouter.post(
-  '/',
+  '/login',
   loginValidation,
   passValidation,
   inputValidationMiddleware,
   async (req: Request, res: Response) => {
     const { login, password } = req.body;
     const checkResult = await usersService.checkCredentials(login, password);
+    checkResult ? res.sendStatus(204) : res.sendStatus(401);
   },
 );
