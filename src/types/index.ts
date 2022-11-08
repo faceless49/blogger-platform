@@ -1,29 +1,29 @@
 export type VideoType = {
-  id: number,
-  title: string,
-  author: string,
-  canBeDownloaded: boolean,
-  minAgeRestriction: null | number,
-  createdAt: string,
-  publicationDate: string,
+  id: number;
+  title: string;
+  author: string;
+  canBeDownloaded: boolean;
+  minAgeRestriction: null | number;
+  createdAt: string;
+  publicationDate: string;
   availableResolutions: Resolutions[];
-}
+};
 
 export type BlogType = {
-  id: string,
-  name: string,
-  youtubeUrl: string
-  createdAt: string
-}
+  id: string;
+  name: string;
+  youtubeUrl: string;
+  createdAt: string;
+};
 export type PostType = {
-  id: string,
-  title: string,
-  shortDescription: string,
-  content: string,
-  blogId: string,
-  blogName: string
-  createdAt: string
-}
+  id: string;
+  title: string;
+  shortDescription: string;
+  content: string;
+  blogId: string;
+  blogName: string;
+  createdAt: string;
+};
 
 export const enum Resolutions {
   P144 = 'P144',
@@ -35,3 +35,11 @@ export const enum Resolutions {
   P1440 = 'P1440',
   P2160 = 'P2160',
 }
+
+export type UserType = {
+  id: string;
+  login: string;
+  email: string;
+  password?: string;
+  createdAt?: string;
+};

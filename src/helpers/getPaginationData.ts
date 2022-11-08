@@ -4,6 +4,8 @@ type RequestUrlQueryType = {
   searchNameTerm?: string;
   sortBy?: string;
   sortDirection?: 'asc' | 'desc' | 1 | -1;
+  searchLoginTerm?: string;
+  searchEmailTerm?: string;
 };
 
 export type RequestQueryType = {
@@ -12,6 +14,8 @@ export type RequestQueryType = {
   searchNameTerm: string;
   sortBy: string;
   sortDirection: 'asc' | 'desc' | 1 | -1;
+  searchLoginTerm?: string;
+  searchEmailTerm?: string;
 };
 
 export const getPaginationData = ({
@@ -20,6 +24,8 @@ export const getPaginationData = ({
   searchNameTerm = '',
   sortBy = 'createdAt',
   sortDirection = 'desc',
+  searchLoginTerm = '',
+  searchEmailTerm = '',
 }: RequestUrlQueryType): RequestQueryType => {
   const page = +pageNumber;
   pageSize = +pageSize;
@@ -30,5 +36,7 @@ export const getPaginationData = ({
     searchNameTerm,
     sortBy,
     sortDirection,
+    searchLoginTerm,
+    searchEmailTerm,
   };
 };
