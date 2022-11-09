@@ -20,8 +20,9 @@ export const usersQueryRepository = {
         { email: { $regex: searchEmailTerm } },
       ],
     };
+
     const users = await usersCollection
-      .find(filter, { projection: { _id: 0 } })
+      .find(filter, { projection: { _id: 0, password: 0 } })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .sort({ [sortBy]: sortDirection })
