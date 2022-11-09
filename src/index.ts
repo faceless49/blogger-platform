@@ -1,6 +1,11 @@
 import express, { Request, Response } from 'express';
 import { blogsRouter } from './routes/blogsRouter';
-import { blogsCollection, postsCollection, runDb } from './repositories/db';
+import {
+  blogsCollection,
+  postsCollection,
+  runDb,
+  usersCollection,
+} from './repositories/db';
 import { postsRouter } from './routes/postsRouter';
 import { videosRouter } from './routes/videosRouter';
 import { usersRouter } from './routes/usersRouter';
@@ -23,6 +28,7 @@ app.get('/', (req: Request, res: Response) => {
 app.delete('/testing/all-data', async (req: Request, res: Response) => {
   await blogsCollection.deleteMany({});
   await postsCollection.deleteMany({});
+  await usersCollection.deleteMany({});
   res.sendStatus(204);
 });
 
