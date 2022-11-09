@@ -42,7 +42,7 @@ usersRouter
     async (req: Request<UserType>, res: Response) => {
       const { login, password, email } = req.body;
       const user = await usersService.createUser(login, password, email);
-      return res.send(user);
+      res.status(201).send(user);
     },
   )
   .delete('/:id', authValidationMiddleware, async (req: Request, res: Response) => {
