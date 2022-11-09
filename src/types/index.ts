@@ -43,3 +43,9 @@ export type UserType = {
   password: string;
   createdAt?: string;
 };
+export type UserOutputViewModel = {
+  id: string;
+  login: string;
+  email: string;
+  createdAt: string;
+};

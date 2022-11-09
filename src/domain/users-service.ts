@@ -1,4 +1,4 @@
-import { UserType } from '../types';
+import { UserOutputViewModel } from '../types';
 import { v1 } from 'uuid';
 import { usersRepository } from '../repositories/usersRepository';
 import bcrypt from 'bcrypt';
@@ -9,7 +9,7 @@ export const usersService = {
     login: string,
     password: string,
     email: string,
-  ): Promise<UserType | null> {
+  ): Promise<UserOutputViewModel | null> {
     const passwordHash = await this._generateHash(password);
     const newUser = {
       id: v1(),
@@ -18,7 +18,14 @@ export const usersService = {
       password: passwordHash,
       email,
     };
-    return await usersRepository.createUser(newUser);
+    const outputNewUser: UserOutputViewModel = {
+      id: newUser.id,
+      createdAt: newUser.createdAt,
+      email: newUser.email,
+      login: newUser.login,
+    };
+    const result = await usersRepository.createUser(newUser);
+    return result ? outputNewUser : null;
   },
 
   async deleteUserById(id: string): Promise<boolean> {
