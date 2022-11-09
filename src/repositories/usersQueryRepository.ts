@@ -16,8 +16,8 @@ export const usersQueryRepository = {
       reqParams;
     const filter = {
       $or: [
-        { login: { $regex: searchLoginTerm } },
-        { email: { $regex: searchEmailTerm } },
+        { login: { $regex: searchLoginTerm, $options: 'i' } },
+        { email: { $regex: searchEmailTerm, $options: 'i' } },
       ],
     };
 
@@ -27,8 +27,8 @@ export const usersQueryRepository = {
       .limit(pageSize)
       .sort({ [sortBy]: sortDirection })
       .toArray();
-
-    const totalCount = (await usersCollection.find({}).toArray()).length;
+    console.log(users.length);
+    const totalCount = await usersCollection.countDocuments(filter);
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
       pagesCount,
