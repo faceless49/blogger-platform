@@ -47,7 +47,7 @@ commentsRouter
     async (req: Request, res: Response) => {
       const { id } = req.params;
       const { content } = req.body;
-      const userId = req.user.id;
+      const { userId } = req.user;
       const comment = await commentsQueryRepository.getCommentById(id);
       if (comment && comment.userId === userId) {
         const isUpdated = await commentsService.updateCommentById(id, content);

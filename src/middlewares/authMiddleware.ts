@@ -24,7 +24,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
   const token = req.headers.authorization.replace(`${AUTH_SCHEME_BEARER}`, '');
 
   const userId = await jwtService.getUserIdByToken(token);
-
   if (userId) {
     req.user = await usersQueryRepository.getUserById(userId);
     next();
