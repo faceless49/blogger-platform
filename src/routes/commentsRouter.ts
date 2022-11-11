@@ -9,14 +9,14 @@ export const commentsRouter = Router({});
 
 commentsRouter
 
-  .get('/comments/:id', async (req: Request, res: Response) => {
+  .get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     const comment = await commentsQueryRepository.getCommentById(id);
     comment ? res.send(comment) : res.send(404);
   })
 
   .delete(
-    '/comments/:id',
+    '/:id',
     authMiddleware,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
@@ -40,7 +40,7 @@ commentsRouter
   )
 
   .put(
-    '/comments/:id',
+    '/:id',
     authMiddleware,
     body('content').trim().notEmpty().isString().isLength({ min: 20, max: 300 }),
     inputValidationMiddleware,
