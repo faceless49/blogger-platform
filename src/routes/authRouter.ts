@@ -24,7 +24,7 @@ authRouter
         const response = {
           accessToken: token,
         };
-        res.status(201).send(response);
+        res.status(200).send(response);
         return;
       }
       res.send(401);

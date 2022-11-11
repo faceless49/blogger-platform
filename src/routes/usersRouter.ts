@@ -47,7 +47,6 @@ usersRouter
   )
   .delete('/:id', authValidationMiddleware, async (req: Request, res: Response) => {
     const { id } = req.params;
-
     const isDeleted = await usersService.deleteUserById(id);
 
     isDeleted ? res.sendStatus(204) : res.send(404);
