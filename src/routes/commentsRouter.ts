@@ -3,7 +3,7 @@ import { commentsQueryRepository } from '../repositories/commentsQueryRepository
 import { inputValidationMiddleware } from '../middlewares';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { commentsService } from '../domain/comments-service';
-import { commentValidation } from './postsRouter';
+import { body } from 'express-validator';
 
 export const commentsRouter = Router({});
 
@@ -42,7 +42,7 @@ commentsRouter
   .put(
     '/comments/:id',
     authMiddleware,
-    commentValidation,
+    body('content').trim().notEmpty().isString().isLength({ min: 20, max: 300 }),
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
       const { id } = req.params;
