@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { blogsRouter } from './routes/blogsRouter';
 import {
   blogsCollection,
+  commentsCollection,
   postsCollection,
   runDb,
   usersCollection,
@@ -10,6 +11,7 @@ import { postsRouter } from './routes/postsRouter';
 import { videosRouter } from './routes/videosRouter';
 import { usersRouter } from './routes/usersRouter';
 import { authRouter } from './routes/authRouter';
+import { commentsRouter } from './routes/commentsRouter';
 
 const app = express();
 const port = process.env.PORT;
@@ -29,6 +31,7 @@ app.delete('/testing/all-data', async (req: Request, res: Response) => {
   await blogsCollection.deleteMany({});
   await postsCollection.deleteMany({});
   await usersCollection.deleteMany({});
+  await commentsCollection.deleteMany({});
   res.sendStatus(204);
 });
 
@@ -37,6 +40,7 @@ app.use('/videos', videosRouter);
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
+app.use('/comments', commentsRouter);
 
 const startApp = async () => {
   await runDb();
