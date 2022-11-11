@@ -21,9 +21,9 @@ commentsRouter
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
       const { id } = req.params;
-      const userId = req.user.id;
+
       const comment = await commentsQueryRepository.getCommentById(id);
-      if (comment && comment.userId === userId) {
+      if (comment) {
         const isDeleted = await commentsService.deleteCommentById(id);
         isDeleted && res.send(204);
         return;
@@ -47,9 +47,9 @@ commentsRouter
     async (req: Request, res: Response) => {
       const { id } = req.params;
       const { content } = req.body;
-      const { userId } = req.user;
       const comment = await commentsQueryRepository.getCommentById(id);
-      if (comment && comment.userId === userId) {
+
+      if (comment) {
         const isUpdated = await commentsService.updateCommentById(id, content);
         isUpdated && res.send(204);
         return;

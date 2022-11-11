@@ -23,7 +23,7 @@ export const commentsQueryRepository = {
       .sort({ [sortBy]: sortDirection })
       .toArray();
 
-    const totalCount = comments.length;
+    const totalCount = await commentsCollection.countDocuments({ userId: postId });
     const pagesCount = Math.ceil(totalCount / pageSize);
 
     return {
