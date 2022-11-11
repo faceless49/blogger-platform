@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { body, param } from 'express-validator';
 import { blogsService } from '../domain/blogs-service';
-import { BlogType } from '../types';
+import { BlogType } from '../types/types';
 import { authValidationMiddleware, inputValidationMiddleware } from '../middlewares';
 import { getPaginationData } from '../helpers';
 import {
@@ -50,6 +50,7 @@ const blogParamsValidation = param('id')
   });
 
 blogsRouter
+
   .get('/', async (req: Request, res: Response) => {
     const reqParams = getPaginationData(req.query);
     const result = await blogsService.getBlogs(reqParams);

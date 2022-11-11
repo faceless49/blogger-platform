@@ -15,6 +15,9 @@ export type BlogType = {
   youtubeUrl: string;
   createdAt: string;
 };
+export type CommentType = {
+  content: string;
+};
 export type PostType = {
   id: string;
   title: string;

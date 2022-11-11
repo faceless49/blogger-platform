@@ -1,5 +1,5 @@
 import { usersCollection } from './db';
-import { UserType } from '../types';
+import { UserType } from '../types/types';
 
 export const usersRepository = {
   async createUser(payload: UserType): Promise<UserType | null> {

@@ -1,5 +1,5 @@
 import { postsCollection } from './db';
-import { PostType } from '../types';
+import { PostType } from '../types/types';
 
 export const postsRepository = {
   async deletePostById(id: string): Promise<boolean> {

@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { authValidationMiddleware, inputValidationMiddleware } from '../middlewares';
-import { UserType } from '../types';
+import { UserType } from '../types/types';
 import { getPaginationData } from '../helpers';
 import { usersQueryRepository } from '../repositories/usersQueryRepository';
 import { body } from 'express-validator';

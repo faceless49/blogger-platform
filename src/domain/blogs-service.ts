@@ -1,4 +1,4 @@
-import { BlogType, PostType } from '../types';
+import { BlogType, PostType } from '../types/types';
 import { blogRepository } from '../repositories/blogRepository';
 import { blogQueryRepository } from '../repositories/blogQueryRepository';
 import { RequestQueryType } from '../helpers/getPaginationData';

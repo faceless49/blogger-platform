@@ -1,11 +1,14 @@
 import { Request, Response, Router } from 'express';
 import { body } from 'express-validator';
 import { authValidationMiddleware, inputValidationMiddleware } from '../middlewares';
-import { PostType } from '../types';
+import { PostType } from '../types/types';
 import { postsService } from '../domain/posts-service';
 import { blogsService } from '../domain/blogs-service';
 import { getPaginationData } from '../helpers';
 import { blogQueryRepository } from '../repositories/blogQueryRepository';
+import { authMiddleware } from '../middlewares/authMiddleware';
+import { postsQueryRepository } from '../repositories/postsQueryRepository';
+import { commentsService } from '../domain/comments-service';
 
 export const postsRouter = Router({});
 export const titleValidation = body('title')
@@ -34,7 +37,11 @@ export const blogIdValidation = body('blogId')
     }
     return true;
   });
-
+export const commentValidation = body('content')
+  .trim()
+  .notEmpty()
+  .isString()
+  .isLength({ min: 20, max: 300 });
 postsRouter
   .get('/', async (req: Request, res: Response) => {
     const reqParams = getPaginationData(req.query);
@@ -72,8 +79,23 @@ postsRouter
     const { id } = req.params;
     const post = await postsService.getPostById(id);
     post ? res.send(post) : res.sendStatus(404);
-    return;
   })
+
+  .get(
+    '/:id/comments',
+    inputValidationMiddleware,
+    async (req: Request, res: Response) => {
+      const { id } = req.params;
+      const reqParams = getPaginationData(req.query);
+      const post = await postsService.getPostById(id);
+      if (post) {
+        const comments = await commentsService.getCommentsByPostId(post.id, reqParams);
+        comments && res.send(comments);
+        return;
+      }
+      res.send(404);
+    },
+  )
 
   .put(
     '/:id',
@@ -100,4 +122,22 @@ postsRouter
     const isDeleted = await postsService.deletePostById(id);
 
     isDeleted ? res.sendStatus(204) : res.send(404);
-  });
+  })
+
+  .post(
+    '/:id/comments',
+    authMiddleware,
+    commentValidation,
+    inputValidationMiddleware,
+    async (req: Request, res: Response) => {
+      const { id } = req.params;
+      const { content } = req.body;
+      const post = await postsQueryRepository.getPostById(id);
+      if (post) {
+        const comment = await commentsService.createComment(post, content);
+        comment && res.status(201).send(comment);
+        return;
+      }
+      res.send(404);
+    },
+  );

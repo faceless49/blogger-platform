@@ -1,6 +1,6 @@
 import { postsCollection } from './db';
 import { PostsOutputViewModel } from '../domain/posts-service';
-import { PostType } from '../types';
+import { PostType } from '../types/types';
 import { RequestQueryType } from '../helpers/getPaginationData';
 
 export const postsQueryRepository = {
