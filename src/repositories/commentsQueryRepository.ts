@@ -34,4 +34,8 @@ export const commentsQueryRepository = {
       items: comments,
     };
   },
+
+  async getCommentById(id: string): Promise<CommentType | null> {
+    return await commentsCollection.findOne({ id }, { projection: { _id: 0 } });
+  },
 };

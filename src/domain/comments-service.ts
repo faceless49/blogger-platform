@@ -33,4 +33,8 @@ export const commentsService = {
   ): Promise<OutputViewModelComment | null> {
     return await commentsQueryRepository.getCommentsByPostId(postId, reqParams);
   },
+
+  async deleteCommentById(id: string): Promise<boolean | null> {
+    return await commentsRepository.deleteCommentById(id);
+  },
 };

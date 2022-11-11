@@ -50,6 +50,7 @@ const blogParamsValidation = param('id')
   });
 
 blogsRouter
+
   .get('/', async (req: Request, res: Response) => {
     const reqParams = getPaginationData(req.query);
     const result = await blogsService.getBlogs(reqParams);

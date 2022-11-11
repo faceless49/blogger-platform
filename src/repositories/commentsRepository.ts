@@ -9,4 +9,8 @@ export const commentsRepository = {
       { projection: { _id: 0 } },
     );
   },
+  async deleteCommentById(id: string): Promise<boolean | null> {
+    const result = await commentsCollection.deleteOne({ id });
+    return result.deletedCount === 1;
+  },
 };
