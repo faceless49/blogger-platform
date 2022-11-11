@@ -9,6 +9,7 @@ import { blogQueryRepository } from '../repositories/blogQueryRepository';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { postsQueryRepository } from '../repositories/postsQueryRepository';
 import { commentsService } from '../domain/comments-service';
+import { usersQueryRepository } from '../repositories/usersQueryRepository';
 
 export const postsRouter = Router({});
 export const titleValidation = body('title')
@@ -132,9 +133,16 @@ postsRouter
     async (req: Request, res: Response) => {
       const { id } = req.params;
       const { content } = req.body;
+      const userId = req.user.id;
+
       const post = await postsQueryRepository.getPostById(id);
       if (post) {
-        const comment = await commentsService.createComment(post, content);
+        const comment = await commentsService.createComment(
+          post,
+          content,
+          userId,
+          req.user.login,
+        );
         comment && res.status(201).send(comment);
         return;
       }

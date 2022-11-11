@@ -16,13 +16,18 @@ export type CommentType = {
 };
 
 export const commentsService = {
-  async createComment(post: PostType, content: string): Promise<CommentType | null> {
+  async createComment(
+    post: PostType,
+    content: string,
+    userId: string,
+    login: string,
+  ): Promise<CommentType | null> {
     const comment: CommentType = {
       id: v1(),
       createdAt: new Date().toISOString(),
-      userId: post.id,
+      userId,
       content,
-      userLogin: post.blogName,
+      userLogin: login,
     };
     return await commentsRepository.createComment(comment);
   },
