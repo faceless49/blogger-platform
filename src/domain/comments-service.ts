@@ -37,4 +37,8 @@ export const commentsService = {
   async deleteCommentById(id: string): Promise<boolean | null> {
     return await commentsRepository.deleteCommentById(id);
   },
+
+  async updateCommentById(id: string, content: string): Promise<boolean | null> {
+    return await commentsRepository.updateCommentById(id, content);
+  },
 };

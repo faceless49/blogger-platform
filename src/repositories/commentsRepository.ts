@@ -13,4 +13,16 @@ export const commentsRepository = {
     const result = await commentsCollection.deleteOne({ id });
     return result.deletedCount === 1;
   },
+
+  async updateCommentById(id: string, content: string): Promise<boolean | null> {
+    const result = await commentsCollection.updateOne(
+      { id },
+      {
+        $set: {
+          content,
+        },
+      },
+    );
+    return result.matchedCount === 1;
+  },
 };

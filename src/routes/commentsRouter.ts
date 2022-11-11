@@ -3,6 +3,7 @@ import { commentsQueryRepository } from '../repositories/commentsQueryRepository
 import { inputValidationMiddleware } from '../middlewares';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { commentsService } from '../domain/comments-service';
+import { commentValidation } from './postsRouter';
 
 export const commentsRouter = Router({});
 
@@ -25,6 +26,29 @@ commentsRouter
       if (comment && comment.userId === userId) {
         const isDeleted = await commentsService.deleteCommentById(id);
         isDeleted && res.send(204);
+      }
+
+      if (!comment) {
+        res.send(404);
+      }
+
+      res.send(403);
+    },
+  )
+
+  .put(
+    '/comments/:id',
+    commentValidation,
+    authMiddleware,
+    inputValidationMiddleware,
+    async (req: Request, res: Response) => {
+      const { id } = req.params;
+      const { content } = req.body;
+      const userId = req.user.id;
+      const comment = await commentsQueryRepository.getCommentById(id);
+      if (comment && comment.userId === userId) {
+        const isUpdated = await commentsService.updateCommentById(id, content);
+        isUpdated && res.send(204);
       }
 
       if (!comment) {
