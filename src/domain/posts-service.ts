@@ -1,4 +1,4 @@
-import { PostType } from '../types';
+import { PostType } from '../types/types';
 import { postsRepository } from '../repositories/postsRepository';
 import { RequestQueryType } from '../helpers/getPaginationData';
 import { postsQueryRepository } from '../repositories/postsQueryRepository';

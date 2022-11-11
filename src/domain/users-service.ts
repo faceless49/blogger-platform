@@ -1,4 +1,4 @@
-import { UserType } from '../types';
+import { UserType } from '../types/types';
 import { v1 } from 'uuid';
 import { usersRepository } from '../repositories/usersRepository';
 import bcrypt from 'bcrypt';
@@ -28,7 +28,8 @@ export const usersService = {
   async checkCredentials(loginOrEmail: string, password: string) {
     const user = await usersQueryRepository.findByLoginOrEmail(loginOrEmail);
     if (!user) return false;
-    return await bcrypt.compare(password, user.password);
+    await bcrypt.compare(password, user.password);
+    return user;
   },
 
   async _generateHash(password: string) {

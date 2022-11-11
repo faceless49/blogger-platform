@@ -1,5 +1,5 @@
 import { blogsCollection, postsCollection } from './db';
-import { BlogType } from '../types';
+import { BlogType } from '../types/types';
 import { RequestQueryType } from '../helpers/getPaginationData';
 import { BlogsOutputViewModel, PostsOutputViewModel } from '../domain/blogs-service';
 

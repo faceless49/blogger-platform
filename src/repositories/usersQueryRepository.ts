@@ -1,5 +1,5 @@
 import { usersCollection } from './db';
-import { UserType } from '../types';
+import { UserType } from '../types/types';
 import { RequestQueryType } from '../helpers/getPaginationData';
 
 export type UsersOutputViewModel = {
@@ -27,7 +27,7 @@ export const usersQueryRepository = {
       .limit(pageSize)
       .sort({ [sortBy]: sortDirection })
       .toArray();
-    console.log(users.length);
+
     const totalCount = await usersCollection.countDocuments(filter);
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
@@ -43,5 +43,9 @@ export const usersQueryRepository = {
     return await usersCollection.findOne({
       $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
     });
+  },
+
+  async getUserById(id: string): Promise<UserType | null> {
+    return await usersCollection.findOne({ id }, { projection: { _id: 0 } });
   },
 };

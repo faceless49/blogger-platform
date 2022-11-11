@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { body } from 'express-validator';
 import { authValidationMiddleware, inputValidationMiddleware } from '../middlewares';
-import { PostType } from '../types';
+import { PostType } from '../types/types';
 import { postsService } from '../domain/posts-service';
 import { blogsService } from '../domain/blogs-service';
 import { getPaginationData } from '../helpers';

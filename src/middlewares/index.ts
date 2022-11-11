@@ -1,6 +1,4 @@
-import {authValidationMiddleware} from './authValidationMiddleware';
-import {inputValidationMiddleware} from './inputValidationMiddleware';
+import { authValidationMiddleware } from './authMiddleware';
+import { inputValidationMiddleware } from './inputValidationMiddleware';
 
-export {
-  authValidationMiddleware, inputValidationMiddleware
-}
+export { authValidationMiddleware, inputValidationMiddleware };
