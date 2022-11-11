@@ -49,9 +49,8 @@ commentsRouter
       const { id } = req.params;
       const { content } = req.body;
       const comment = await commentsQueryRepository.getCommentById(id);
-      const currentUser = await usersQueryRepository.getUserById(req.user.id);
 
-      if (comment && currentUser && comment.userId === currentUser.id) {
+      if (comment) {
         const isUpdated = await commentsService.updateCommentById(id, content);
         isUpdated && res.send(204);
         return;
