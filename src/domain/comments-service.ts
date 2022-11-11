@@ -1,6 +1,11 @@
 import { PostType } from '../types/types';
 import { v1 } from 'uuid';
 import { commentsRepository } from '../repositories/commentsRepository';
+import {
+  commentsQueryRepository,
+  OutputViewModelComment,
+} from '../repositories/commentsQueryRepository';
+import { RequestQueryType } from '../helpers/getPaginationData';
 
 export type CommentType = {
   id: string;
@@ -20,5 +25,12 @@ export const commentsService = {
       userLogin: post.blogName,
     };
     return await commentsRepository.createComment(comment);
+  },
+
+  async getCommentsByPostId(
+    postId: string,
+    reqParams: RequestQueryType,
+  ): Promise<OutputViewModelComment | null> {
+    return await commentsQueryRepository.getCommentsByPostId(postId, reqParams);
   },
 };

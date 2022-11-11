@@ -82,6 +82,23 @@ postsRouter
     return;
   })
 
+  .get(
+    '/:id/comments',
+    inputValidationMiddleware,
+    async (req: Request, res: Response) => {
+      const { id } = req.params;
+      const reqParams = getPaginationData(req.query);
+      const post = await postsService.getPostById(id);
+      if (post) {
+        const comments = await commentsService.getCommentsByPostId(post.id, reqParams);
+        comments && res.send(comments);
+        return;
+      }
+      res.send(404);
+      return;
+    },
+  )
+
   .put(
     '/:id',
     authValidationMiddleware,
@@ -112,7 +129,7 @@ postsRouter
   .post(
     '/:id/comments',
     authMiddleware,
-    contentValidation,
+    commentValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
       const { id } = req.params;
