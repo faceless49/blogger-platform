@@ -79,7 +79,6 @@ postsRouter
     const { id } = req.params;
     const post = await postsService.getPostById(id);
     post ? res.send(post) : res.sendStatus(404);
-    return;
   })
 
   .get(
@@ -95,7 +94,6 @@ postsRouter
         return;
       }
       res.send(404);
-      return;
     },
   )
 
