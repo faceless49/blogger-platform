@@ -1,7 +1,6 @@
 import { MongoClient } from 'mongodb';
-import { BlogType, PostType, UserType } from '../types/types';
+import { BlogType, CommentType, PostType, UserType } from '../types/types';
 import 'dotenv/config';
-import { CommentType } from '../domain/comments-service';
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://0.0.0.0:27017';
 

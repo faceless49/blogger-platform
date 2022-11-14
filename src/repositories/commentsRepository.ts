@@ -1,5 +1,5 @@
 import { commentsCollection } from './db';
-import { CommentType } from '../domain/comments-service';
+import { CommentType } from '../types/types';
 
 export const commentsRepository = {
   async createComment(payload: CommentType): Promise<CommentType | null> {

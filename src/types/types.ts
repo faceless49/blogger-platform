@@ -15,9 +15,6 @@ export type BlogType = {
   youtubeUrl: string;
   createdAt: string;
 };
-export type CommentType = {
-  content: string;
-};
 export type PostType = {
   id: string;
   title: string;
@@ -46,9 +43,11 @@ export type UserType = {
   password: string;
   createdAt?: string;
 };
-export type UserOutputViewModel = {
+
+export type CommentType = {
   id: string;
-  login: string;
-  email: string;
+  content: string;
+  userId: string;
+  userLogin: string;
   createdAt: string;
 };

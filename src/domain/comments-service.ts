@@ -1,4 +1,4 @@
-import { PostType } from '../types/types';
+import { CommentType, PostType } from '../types/types';
 import { v1 } from 'uuid';
 import { commentsRepository } from '../repositories/commentsRepository';
 import {
@@ -6,14 +6,6 @@ import {
   OutputViewModelComment,
 } from '../repositories/commentsQueryRepository';
 import { RequestQueryType } from '../helpers/getPaginationData';
-
-export type CommentType = {
-  id: string;
-  content: string;
-  userId: string;
-  userLogin: string;
-  createdAt: string;
-};
 
 export const commentsService = {
   async createComment(
@@ -33,10 +25,10 @@ export const commentsService = {
   },
 
   async getCommentsByPostId(
-    postId: string,
+    userLogin: string,
     reqParams: RequestQueryType,
   ): Promise<OutputViewModelComment | null> {
-    return await commentsQueryRepository.getCommentsByPostId(postId, reqParams);
+    return await commentsQueryRepository.getCommentsByPostId(userLogin, reqParams);
   },
 
   async deleteCommentById(id: string): Promise<boolean | null> {

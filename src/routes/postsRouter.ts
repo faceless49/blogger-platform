@@ -9,7 +9,6 @@ import { blogQueryRepository } from '../repositories/blogQueryRepository';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { postsQueryRepository } from '../repositories/postsQueryRepository';
 import { commentsService } from '../domain/comments-service';
-import { usersQueryRepository } from '../repositories/usersQueryRepository';
 
 export const postsRouter = Router({});
 export const titleValidation = body('title')
@@ -90,7 +89,10 @@ postsRouter
       const reqParams = getPaginationData(req.query);
       const post = await postsService.getPostById(id);
       if (post) {
-        const comments = await commentsService.getCommentsByPostId(post.id, reqParams);
+        const comments = await commentsService.getCommentsByPostId(
+          post.blogName,
+          reqParams,
+        );
         comments && res.send(comments);
         return;
       }
