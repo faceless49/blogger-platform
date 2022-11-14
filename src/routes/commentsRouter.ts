@@ -4,7 +4,6 @@ import { inputValidationMiddleware } from '../middlewares';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { commentsService } from '../domain/comments-service';
 import { body } from 'express-validator';
-import { usersQueryRepository } from '../repositories/usersQueryRepository';
 
 export const commentsRouter = Router({});
 
@@ -22,9 +21,8 @@ commentsRouter
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
       const { id } = req.params;
-      const currentUser = await usersQueryRepository.getUserById(req.user.id);
       const comment = await commentsQueryRepository.getCommentById(id);
-      if (comment && currentUser && comment.userId === currentUser.id) {
+      if (comment && comment.userId === req.user.id) {
         const isDeleted = await commentsService.deleteCommentById(id);
         isDeleted && res.send(204);
         return;
@@ -49,8 +47,8 @@ commentsRouter
       const { id } = req.params;
       const { content } = req.body;
       const comment = await commentsQueryRepository.getCommentById(id);
-
-      if (comment) {
+      // debugger;
+      if (comment && comment.userId === req.user.id) {
         const isUpdated = await commentsService.updateCommentById(id, content);
         isUpdated && res.send(204);
         return;
