@@ -49,5 +49,5 @@ usersRouter
     const { id } = req.params;
     const isDeleted = await usersService.deleteUserById(id);
 
-    isDeleted ? res.sendStatus(204) : res.send(404);
+    isDeleted ? res.send(204) : res.send(404);
   });
