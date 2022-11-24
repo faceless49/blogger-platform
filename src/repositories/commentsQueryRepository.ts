@@ -12,18 +12,18 @@ export type OutputViewModelComment = {
 
 export const commentsQueryRepository = {
   async getCommentsByPostId(
-    userLogin: string,
+    postId: string,
     reqParams: RequestQueryType,
   ): Promise<OutputViewModelComment> {
     const { sortBy, sortDirection, pageSize, page } = reqParams;
     const comments = await commentsCollection
-      .find({ userLogin }, { projection: { _id: 0 } })
+      .find({ postId }, { projection: { _id: 0 } })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .sort({ [sortBy]: sortDirection })
       .toArray();
 
-    const totalCount = await commentsCollection.countDocuments({ userLogin });
+    const totalCount = await commentsCollection.countDocuments({ postId });
     const pagesCount = Math.ceil(totalCount / pageSize);
 
     return {

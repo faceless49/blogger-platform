@@ -89,10 +89,7 @@ postsRouter
       const reqParams = getPaginationData(req.query);
       const post = await postsService.getPostById(id);
       if (post) {
-        const comments = await commentsService.getCommentsByPostId(
-          post.blogName,
-          reqParams,
-        );
+        const comments = await commentsService.getCommentsByPostId(post.id, reqParams);
         comments && res.send(comments);
         return;
       }

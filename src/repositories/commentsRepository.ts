@@ -6,7 +6,7 @@ export const commentsRepository = {
     await commentsCollection.insertOne(payload);
     return await commentsCollection.findOne(
       { id: payload.id },
-      { projection: { _id: 0 } },
+      { projection: { _id: 0, postId: 0 } },
     );
   },
   async deleteCommentById(id: string): Promise<boolean | null> {

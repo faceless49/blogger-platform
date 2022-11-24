@@ -20,15 +20,16 @@ export const commentsService = {
       userId,
       content,
       userLogin: login,
+      postId: post.id,
     };
     return await commentsRepository.createComment(comment);
   },
 
   async getCommentsByPostId(
-    userLogin: string,
+    postId: string,
     reqParams: RequestQueryType,
   ): Promise<OutputViewModelComment | null> {
-    return await commentsQueryRepository.getCommentsByPostId(userLogin, reqParams);
+    return await commentsQueryRepository.getCommentsByPostId(postId, reqParams);
   },
 
   async deleteCommentById(id: string): Promise<boolean | null> {

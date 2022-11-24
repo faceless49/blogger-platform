@@ -50,4 +50,5 @@ export type CommentType = {
   userId: string;
   userLogin: string;
   createdAt: string;
+  postId?: string;
 };
