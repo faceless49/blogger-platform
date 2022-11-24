@@ -12,7 +12,7 @@ export type VideoType = {
 export type BlogType = {
   id: string;
   name: string;
-  webSiteUrl: string;
+  websiteUrl: string;
   createdAt: string;
   description: string;
 };

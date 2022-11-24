@@ -14,7 +14,7 @@ export const blogRepository = {
   async updateVideoById({
     id,
     name,
-    webSiteUrl,
+    websiteUrl,
     description,
   }: Omit<BlogType, 'createdAt'>) {
     const result = await blogsCollection.updateOne(
@@ -22,7 +22,7 @@ export const blogRepository = {
       {
         $set: {
           name,
-          webSiteUrl,
+          websiteUrl,
           description,
         },
       },

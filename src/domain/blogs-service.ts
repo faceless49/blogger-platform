@@ -42,14 +42,14 @@ export const blogsService = {
 
   async createBlog(
     name: string,
-    webSiteUrl: string,
+    websiteUrl: string,
     description: string,
   ): Promise<BlogType | null> {
     const newBlog: BlogType = {
       id: v1(),
       createdAt: new Date().toISOString(),
       name,
-      webSiteUrl,
+      websiteUrl,
       description,
     };
     return await blogRepository.createBlog(newBlog);
@@ -58,10 +58,10 @@ export const blogsService = {
   async updateVideoById({
     id,
     name,
-    webSiteUrl,
+    websiteUrl,
     description,
   }: Omit<BlogType, 'createdAt'>) {
-    return await blogRepository.updateVideoById({ id, name, webSiteUrl, description });
+    return await blogRepository.updateVideoById({ id, name, websiteUrl, description });
   },
 
   async createPostByBlogId(
