@@ -11,13 +11,19 @@ export const blogRepository = {
     await blogsCollection.insertOne(newBlog);
     return await blogsCollection.findOne({ id: newBlog.id }, { projection: { _id: 0 } });
   },
-  async updateVideoById({ id, name, youtubeUrl }: Omit<BlogType, 'createdAt'>) {
+  async updateVideoById({
+    id,
+    name,
+    webSiteUrl,
+    description,
+  }: Omit<BlogType, 'createdAt'>) {
     const result = await blogsCollection.updateOne(
       { id },
       {
         $set: {
           name,
-          youtubeUrl,
+          webSiteUrl,
+          description,
         },
       },
     );

@@ -12,8 +12,9 @@ export type VideoType = {
 export type BlogType = {
   id: string;
   name: string;
-  youtubeUrl: string;
+  webSiteUrl: string;
   createdAt: string;
+  description: string;
 };
 export type PostType = {
   id: string;

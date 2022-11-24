@@ -40,18 +40,28 @@ export const blogsService = {
     return await blogRepository.deleteVideoById(id);
   },
 
-  async createBlog(name: string, youtubeUrl: string): Promise<BlogType | null> {
+  async createBlog(
+    name: string,
+    webSiteUrl: string,
+    description: string,
+  ): Promise<BlogType | null> {
     const newBlog: BlogType = {
       id: v1(),
       createdAt: new Date().toISOString(),
       name,
-      youtubeUrl,
+      webSiteUrl,
+      description,
     };
     return await blogRepository.createBlog(newBlog);
   },
 
-  async updateVideoById({ id, name, youtubeUrl }: Omit<BlogType, 'createdAt'>) {
-    return await blogRepository.updateVideoById({ id, name, youtubeUrl });
+  async updateVideoById({
+    id,
+    name,
+    webSiteUrl,
+    description,
+  }: Omit<BlogType, 'createdAt'>) {
+    return await blogRepository.updateVideoById({ id, name, webSiteUrl, description });
   },
 
   async createPostByBlogId(

@@ -17,8 +17,8 @@ authRouter
     passValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
-      const { login, password } = req.body;
-      const user = await usersService.checkCredentials(login, password);
+      const { loginOrEmail, password } = req.body;
+      const user = await usersService.checkCredentials(loginOrEmail, password);
       if (user) {
         const token = await jwtService.createJWT(user);
         const response = {

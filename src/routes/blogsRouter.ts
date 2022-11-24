@@ -17,7 +17,7 @@ export const blogsRouter = Router({});
 const nameValidation = body('name').trim().notEmpty().isString().isLength({
   max: 15,
 });
-const urlYoutubeValidation = body('youtubeUrl')
+const urlYoutubeValidation = body('webSiteUrl')
   .trim()
   .notEmpty()
   .isString()
@@ -36,6 +36,9 @@ const blogIdValidation = body('blogId')
     }
     return true;
   });
+const blogDescValidation = body('description').trim().notEmpty().isString().isLength({
+  max: 500,
+});
 
 const blogParamsValidation = param('id')
   .trim()
@@ -61,11 +64,12 @@ blogsRouter
     '/',
     authValidationMiddleware,
     nameValidation,
+    blogDescValidation,
     urlYoutubeValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
-      const { name, youtubeUrl } = req.body;
-      const response = await blogsService.createBlog(name, youtubeUrl);
+      const { name, webSiteUrl, description } = req.body;
+      const response = await blogsService.createBlog(name, webSiteUrl, description);
       res.status(201).send(response);
     },
   )
@@ -117,12 +121,13 @@ blogsRouter
     '/:id',
     authValidationMiddleware,
     nameValidation,
+    blogDescValidation,
     urlYoutubeValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
       const { id } = req.params;
-      const { name, youtubeUrl } = req.body;
-      const payload: Omit<BlogType, 'createdAt'> = { id, name, youtubeUrl };
+      const { name, webSiteUrl, description } = req.body;
+      const payload: Omit<BlogType, 'createdAt'> = { id, name, webSiteUrl, description };
 
       const isUpdated = await blogsService.updateVideoById(payload);
       isUpdated ? res.sendStatus(204) : res.send(404);
