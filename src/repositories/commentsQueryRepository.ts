@@ -17,7 +17,7 @@ export const commentsQueryRepository = {
   ): Promise<OutputViewModelComment> {
     const { sortBy, sortDirection, pageSize, page } = reqParams;
     const comments = await commentsCollection
-      .find({ postId }, { projection: { _id: 0 } })
+      .find({ postId }, { projection: { _id: 0, postId: 0 } })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
       .sort({ [sortBy]: sortDirection })
@@ -36,6 +36,9 @@ export const commentsQueryRepository = {
   },
 
   async getCommentById(id: string): Promise<CommentType | null> {
-    return await commentsCollection.findOne({ id }, { projection: { _id: 0 } });
+    return await commentsCollection.findOne(
+      { id },
+      { projection: { _id: 0, postId: 0 } },
+    );
   },
 };

@@ -7,7 +7,7 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 import { usersQueryRepository } from '../repositories/usersQueryRepository';
 
 export const authRouter = Router({});
-const loginValidation = body('login').trim().notEmpty().isString();
+const loginValidation = body('loginOrEmail').trim().notEmpty().isString();
 const passValidation = body('password').trim().notEmpty().isString();
 
 authRouter
