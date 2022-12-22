@@ -1,4 +1,4 @@
-import { UserDBType } from '../types/types';
+import { UserDBType, UserType } from '../types/types';
 import { v1, v4 } from 'uuid';
 import { usersRepository } from '../repositories/usersRepository';
 import bcrypt from 'bcrypt';
@@ -11,7 +11,7 @@ export const usersService = {
     login: string,
     password: string,
     email: string,
-  ): Promise<UserDBType | null> {
+  ): Promise<UserType | null> {
     const passwordHash = await this._generateHash(password);
     const newUser: UserDBType = {
       id: v1(),
