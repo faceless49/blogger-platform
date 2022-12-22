@@ -44,6 +44,18 @@ export type UserType = {
   password: string;
   createdAt?: string;
 };
+export type UserDBType = {
+  id: string;
+  login: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  emailConfirmation: {
+    confirmationCode: string;
+    expirationDate: Date;
+    isConfirmed: boolean;
+  };
+};
 
 export type CommentType = {
   id: string;

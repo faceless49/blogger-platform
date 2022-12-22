@@ -12,6 +12,7 @@ import { videosRouter } from './routes/videosRouter';
 import { usersRouter } from './routes/usersRouter';
 import { authRouter } from './routes/authRouter';
 import { commentsRouter } from './routes/commentsRouter';
+import { emailRouter } from './routes/emailRouter';
 
 const app = express();
 const port = process.env.PORT;
@@ -41,6 +42,7 @@ app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 app.use('/comments', commentsRouter);
+app.use('/email', emailRouter);
 
 const startApp = async () => {
   await runDb();

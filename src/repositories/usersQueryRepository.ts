@@ -1,5 +1,5 @@
 import { usersCollection } from './db';
-import { UserType } from '../types/types';
+import { UserDBType, UserType } from '../types/types';
 import { RequestQueryType } from '../helpers/getPaginationData';
 
 export type UsersOutputViewModel = {
@@ -39,13 +39,22 @@ export const usersQueryRepository = {
     };
   },
 
-  async findByLoginOrEmail(loginOrEmail: string) {
-    return await usersCollection.findOne({
-      $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
-    });
+  async findByLoginOrEmail(loginOrEmail: string): Promise<UserDBType | null> {
+    return await usersCollection.findOne(
+      {
+        $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
+      },
+      { projection: { _id: 0 } },
+    );
   },
 
   async getUserById(id: string): Promise<UserType | null> {
     return await usersCollection.findOne({ id }, { projection: { _id: 0 } });
+  },
+  async getUserByCode(code: string): Promise<UserDBType | null> {
+    return await usersCollection.findOne(
+      { 'emailConfirmation.confirmationCode': code },
+      { projection: { _id: 0 } },
+    );
   },
 };

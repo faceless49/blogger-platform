@@ -13,4 +13,11 @@ export const usersRepository = {
     const result = await usersCollection.deleteOne({ id });
     return result.deletedCount === 1;
   },
+  async updateConfirmation(id: string): Promise<boolean> {
+    const result = await usersCollection.updateOne(
+      { id },
+      { $set: { 'emailConfirmataion.isConfirmed': true } },
+    );
+    return result.modifiedCount === 1;
+  },
 };

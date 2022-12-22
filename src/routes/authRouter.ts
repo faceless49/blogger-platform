@@ -9,6 +9,22 @@ import { usersQueryRepository } from '../repositories/usersQueryRepository';
 export const authRouter = Router({});
 const loginValidation = body('loginOrEmail').trim().notEmpty().isString();
 const passValidation = body('password').trim().notEmpty().isString();
+const regLoginValidation = body('login')
+  .trim()
+  .notEmpty()
+  .isString()
+  .isLength({ min: 3, max: 10 })
+  .matches(/^[a-zA-Z0-9_-]*$/);
+const regEmailValidation = body('email')
+  .trim()
+  .notEmpty()
+  .isString()
+  .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+const regPassValidation = body('password')
+  .trim()
+  .notEmpty()
+  .isString()
+  .isLength({ min: 6, max: 20 });
 
 authRouter
   .post(
@@ -39,4 +55,43 @@ authRouter
     }
     res.send(200);
     return;
+  })
+
+  .post('/registration-confirmation', async (req: Request, res: Response) => {
+    const result = await usersService.confirmEmail(req.body.code);
+    if (result) {
+      res.status(201).send();
+    } else {
+      res.sendStatus(400);
+    }
+  })
+  .post(
+    '/registration',
+    regEmailValidation,
+    regEmailValidation,
+    regPassValidation,
+    inputValidationMiddleware,
+    async (req: Request, res: Response) => {
+      const { login, password, email } = req.body;
+
+      const isLoginExist = await usersQueryRepository.findByLoginOrEmail(login);
+      const isEmailExist = await usersQueryRepository.findByLoginOrEmail(email);
+      if (isEmailExist || isLoginExist) {
+        return res.send(400);
+      }
+      const user = await usersService.createUser(login, password, email);
+      if (user) {
+        res.send(204);
+      } else {
+        res.status(400).send({});
+      }
+    },
+  )
+  .post('/registration-email-resending', async (req: Request, res: Response) => {
+    const result = await usersService.confirmEmail(req.body.code);
+    if (result) {
+      res.status(201).send();
+    } else {
+      res.sendStatus(400);
+    }
   });
