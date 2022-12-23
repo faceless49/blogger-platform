@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { inputValidationMiddleware } from '../middlewares';
-import { body } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 import { usersService } from '../domain/users-service';
 import { jwtService } from '../application/jwtService';
 import { authMiddleware } from '../middlewares/authMiddleware';
@@ -76,6 +76,15 @@ authRouter
 
       const isLoginExist = await usersQueryRepository.findByLoginOrEmail(login);
       const isEmailExist = await usersQueryRepository.findByLoginOrEmail(email);
+      const error = validationResult(req).formatWith(({ param, msg }) => {
+        return {
+          message: msg,
+          field: param,
+        };
+      });
+      const errors = {
+        errorsMessages: error.array({ onlyFirstError: true }),
+      };
       if (isEmailExist || isLoginExist) {
         return res.send(400);
       }
@@ -83,7 +92,7 @@ authRouter
       if (user) {
         res.sendStatus(204);
       } else {
-        res.sendStatus(400).send({});
+        res.sendStatus(400).send(errors);
       }
     },
   )
