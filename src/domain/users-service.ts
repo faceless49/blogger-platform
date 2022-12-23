@@ -71,4 +71,15 @@ export const usersService = {
 
     return await usersRepository.updateConfirmation(user.id);
   },
+
+  async resendEmail(email: string): Promise<boolean | void> {
+    const user = await usersQueryRepository.findByLoginOrEmail(email);
+    if (user?.emailConfirmation?.isConfirmed) return false;
+
+    if (user && !user.emailConfirmation?.isConfirmed) {
+      await emailManager.sendEmailConfirmationMessage(user);
+      return true;
+    }
+    return;
+  },
 };
