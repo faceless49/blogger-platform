@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { inputValidationMiddleware } from '../middlewares';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import { usersService } from '../domain/users-service';
 import { jwtService } from '../application/jwtService';
 import { authMiddleware } from '../middlewares/authMiddleware';
@@ -73,33 +73,22 @@ authRouter
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
       const { login, password, email } = req.body;
-
       const isLoginExist = await usersQueryRepository.findByLoginOrEmail(login);
       const isEmailExist = await usersQueryRepository.findByLoginOrEmail(email);
-      const error = validationResult(req).formatWith(({ param, msg }) => {
-        return {
-          message: msg,
-          field: param,
-        };
-      });
-      const errors = {
-        errorsMessages: error.array({ onlyFirstError: true }),
-      };
+      const errors = [];
       if (isEmailExist || isLoginExist) {
-        return res.status(400).send({
-          errorsMessages: [
-            {
-              message: 'Try another email or login',
-              field: isLoginExist ? login : email,
-            },
-          ],
+        errors.push({
+          message: isEmailExist ? 'email already exist' : 'login already exist',
+          field: isEmailExist ? 'email' : isLoginExist,
         });
+        return res.status(400).send(errors);
       }
       const user = await usersService.createUser(login, password, email);
+      console.log(user);
       if (user) {
-        res.sendStatus(204);
+        return res.send(204);
       } else {
-        res.sendStatus(400).send({});
+        return res.status(400);
       }
     },
   )
