@@ -48,7 +48,7 @@ export const usersQueryRepository = {
     );
   },
 
-  async getUserById(id: string): Promise<UserType | null> {
+  async getUserById(id: string): Promise<UserDBType | null> {
     return await usersCollection.findOne({ id }, { projection: { _id: 0 } });
   },
   async getUserByCode(code: string): Promise<UserDBType | null> {

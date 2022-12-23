@@ -50,10 +50,10 @@ export type UserDBType = {
   email: string;
   password: string;
   createdAt: string;
-  emailConfirmation: {
-    confirmationCode: string;
-    expirationDate: Date;
-    isConfirmed: boolean;
+  emailConfirmation?: {
+    confirmationCode?: string;
+    expirationDate?: Date;
+    isConfirmed?: boolean;
   };
 };
 

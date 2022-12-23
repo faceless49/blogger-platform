@@ -74,16 +74,16 @@ authRouter
     async (req: Request, res: Response) => {
       const { login, password, email } = req.body;
 
-      // const isLoginExist = await usersQueryRepository.findByLoginOrEmail(login);
-      // const isEmailExist = await usersQueryRepository.findByLoginOrEmail(email);
-      // if (isEmailExist || isLoginExist) {
-      //   return res.send(400);
-      // }
+      const isLoginExist = await usersQueryRepository.findByLoginOrEmail(login);
+      const isEmailExist = await usersQueryRepository.findByLoginOrEmail(email);
+      if (isEmailExist || isLoginExist) {
+        return res.send(400);
+      }
       const user = await usersService.createUser(login, password, email);
       if (user) {
         res.sendStatus(204);
       } else {
-        res.status(400).send({});
+        res.sendStatus(400).send({});
       }
     },
   )

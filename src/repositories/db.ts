@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import { BlogType, CommentType, PostType, UserType } from '../types/types';
+import { BlogType, CommentType, PostType, UserDBType } from '../types/types';
 import 'dotenv/config';
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://0.0.0.0:27017';
@@ -8,7 +8,7 @@ const client = new MongoClient(mongoUri);
 const db = client.db('heroDb');
 export const postsCollection = db.collection<PostType>('posts');
 export const blogsCollection = db.collection<BlogType>('blogs');
-export const usersCollection = db.collection<UserType>('users');
+export const usersCollection = db.collection<UserDBType>('users');
 export const commentsCollection = db.collection<CommentType>('comments');
 
 export async function runDb() {
