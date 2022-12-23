@@ -57,14 +57,19 @@ authRouter
     return;
   })
 
-  .post('/registration-confirmation', async (req: Request, res: Response) => {
-    const result = await usersService.confirmEmail(req.body.code);
-    if (result) {
-      res.status(201).send();
-    } else {
-      res.sendStatus(400);
-    }
-  })
+  .post(
+    '/registration-confirmation',
+    body('code').trim().notEmpty().isString(),
+    inputValidationMiddleware,
+    async (req: Request, res: Response) => {
+      const result = await usersService.confirmEmail(req.body.code);
+      if (result) {
+        res.status(201).send();
+      } else {
+        res.sendStatus(400);
+      }
+    },
+  )
   .post(
     '/registration',
     regEmailValidation,
@@ -92,11 +97,16 @@ authRouter
       }
     },
   )
-  .post('/registration-email-resending', async (req: Request, res: Response) => {
-    const result = await usersService.confirmEmail(req.body.code);
-    if (result) {
-      res.status(201).send();
-    } else {
-      res.sendStatus(400);
-    }
-  });
+  .post(
+    '/registration-email-resending',
+    regEmailValidation,
+    inputValidationMiddleware,
+    async (req: Request, res: Response) => {
+      const result = await usersService.resendEmail(req.body.email);
+      if (result) {
+        res.status(204).send();
+      } else {
+        res.sendStatus(400);
+      }
+    },
+  );
