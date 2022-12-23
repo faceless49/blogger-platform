@@ -77,9 +77,11 @@ export const usersService = {
     if (user?.emailConfirmation?.isConfirmed) return false;
 
     if (user && !user.emailConfirmation?.isConfirmed) {
-      await emailManager.sendEmailConfirmationMessage(user);
+      const code = v4();
+      await emailManager.sendResendEmailRegistration(user, code);
+      await usersRepository.updateEmailConfirmationCode(user.id, code);
       return true;
     }
-    return;
+    return false;
   },
 };

@@ -64,7 +64,7 @@ authRouter
     async (req: Request, res: Response) => {
       const result = await usersService.confirmEmail(req.body.code);
       if (result) {
-        res.status(201).send();
+        res.sendStatus(204);
       } else {
         res.sendStatus(400);
       }
