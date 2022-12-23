@@ -86,7 +86,14 @@ authRouter
         errorsMessages: error.array({ onlyFirstError: true }),
       };
       if (isEmailExist || isLoginExist) {
-        return res.send(400);
+        return res.status(400).send({
+          errorsMessages: [
+            {
+              message: 'Try another email or login',
+              field: isLoginExist ? login : email,
+            },
+          ],
+        });
       }
       const user = await usersService.createUser(login, password, email);
       if (user) {
