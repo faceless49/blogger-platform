@@ -10,11 +10,14 @@ export const emailManager = {
     );
   },
 
-  async sendEmailRegistration(login: string, email: string) {
+  async sendResendEmailRegistration(user: UserDBType, code: string) {
     await emailAdapter.sendEmail(
-      email,
-      `Registration`,
-      `<div>${login} ссылка для восстановления пароля</div>`,
+      user.email,
+      `Registration resend`,
+      ` <h1>Thank for your registration</h1>
+       <p>To finish registration please follow the link below:
+          <a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
+      </p>`,
     );
   },
 
