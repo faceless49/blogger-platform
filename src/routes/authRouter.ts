@@ -68,23 +68,27 @@ authRouter
   .post(
     '/registration',
     regEmailValidation,
-    regEmailValidation,
+    regLoginValidation,
     regPassValidation,
+    body('login').custom((value) => {
+      return usersQueryRepository.findByLoginOrEmail(value).then((user) => {
+        if (user) {
+          throw new Error('Email is already use');
+        }
+      });
+    }),
+    body('email').custom((value) => {
+      return usersQueryRepository.findByLoginOrEmail(value).then((user) => {
+        if (user) {
+          return Promise.reject('email is already use');
+        }
+      });
+    }),
     inputValidationMiddleware,
+
     async (req: Request, res: Response) => {
       const { login, password, email } = req.body;
-      const isLoginExist = await usersQueryRepository.findByLoginOrEmail(login);
-      const isEmailExist = await usersQueryRepository.findByLoginOrEmail(email);
-      const errors = [];
-      if (isEmailExist || isLoginExist) {
-        errors.push({
-          message: isEmailExist ? 'email already exist' : 'login already exist',
-          field: isEmailExist ? 'email' : isLoginExist,
-        });
-        return res.status(400).send(errors);
-      }
       const user = await usersService.createUser(login, password, email);
-      console.log(user);
       if (user) {
         return res.send(204);
       } else {
