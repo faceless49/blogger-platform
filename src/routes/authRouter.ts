@@ -99,7 +99,7 @@ authRouter
       if (user) {
         res.sendStatus(204);
       } else {
-        res.sendStatus(400).send(errors);
+        res.sendStatus(400).send({});
       }
     },
   )
