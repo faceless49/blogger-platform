@@ -42,7 +42,7 @@ authRouter
         };
         res.status(200).send(response);
       }
-      res.status(401);
+      return res.send(401);
     },
   )
   .get('/me', authMiddleware, async (req: Request, res: Response) => {
