@@ -84,7 +84,7 @@ authRouter
       if (isEmailExist || isLoginExist) {
         errors.push({
           message: isEmailExist ? 'email already exist' : 'login already exist',
-          field: isEmailExist ? 'email' : isLoginExist,
+          field: isEmailExist ? 'email' : 'login',
         });
         return res.status(400).send({ errorsMessages: errors });
       }
