@@ -72,32 +72,29 @@ authRouter
   )
   .post(
     '/registration',
-    regEmailValidation,
     regLoginValidation,
+    regEmailValidation,
     regPassValidation,
-    body('login').custom((value) => {
-      return usersQueryRepository.findByLoginOrEmail(value).then((user) => {
-        if (user) {
-          throw new Error('Email is already use');
-        }
-      });
-    }),
-    body('email').custom((value) => {
-      return usersQueryRepository.findByLoginOrEmail(value).then((user) => {
-        if (user) {
-          return Promise.reject('email is already use');
-        }
-      });
-    }),
     inputValidationMiddleware,
-
     async (req: Request, res: Response) => {
       const { login, password, email } = req.body;
+      const isLoginExist = await usersQueryRepository.findByLoginOrEmail(login);
+      const isEmailExist = await usersQueryRepository.findByLoginOrEmail(email);
+      const errors = [];
+      if (isEmailExist || isLoginExist) {
+        errors.push({
+          message: isEmailExist ? 'email already exist' : 'login already exist',
+          field: isEmailExist ? 'email' : isLoginExist,
+        });
+        return res.status(400).send(errors);
+      }
       const user = await usersService.createUser(login, password, email);
       if (user) {
         return res.send(204);
       } else {
-        return res.status(400);
+        res.status(400).send({
+          errorsMessages: [{ message: 'wrong code', field: 'code' }],
+        });
       }
     },
   )
@@ -110,7 +107,9 @@ authRouter
       if (result) {
         res.status(204).send();
       } else {
-        res.sendStatus(400);
+        res.status(400).send({
+          errorsMessages: [{ message: 'email is confirmed', field: 'email' }],
+        });
       }
     },
   );
