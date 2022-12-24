@@ -72,7 +72,7 @@ authRouter
   )
   .post(
     '/registration',
-    regEmailValidation,
+    regLoginValidation,
     regEmailValidation,
     regPassValidation,
     inputValidationMiddleware,
@@ -89,11 +89,12 @@ authRouter
         return res.status(400).send(errors);
       }
       const user = await usersService.createUser(login, password, email);
-      console.log(user);
       if (user) {
         return res.send(204);
       } else {
-        return res.status(400);
+        res.status(400).send({
+          errorsMessages: [{ message: 'wrong code', field: 'code' }],
+        });
       }
     },
   )
@@ -106,7 +107,9 @@ authRouter
       if (result) {
         res.status(204).send();
       } else {
-        res.sendStatus(400);
+        res.status(400).send({
+          errorsMessages: [{ message: 'email is confirmed', field: 'email' }],
+        });
       }
     },
   );
