@@ -40,10 +40,9 @@ authRouter
         const response = {
           accessToken: token,
         };
-        res.send(response);
+        res.status(200).send(response);
       }
-      res.sendStatus(401);
-      return;
+      res.status(401);
     },
   )
   .get('/me', authMiddleware, async (req: Request, res: Response) => {
