@@ -40,7 +40,7 @@ authRouter
         const response = {
           accessToken: token,
         };
-        res.status(200).send(response);
+        res.sendStatus(200).send(response);
       }
       res.send(401);
     },
