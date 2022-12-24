@@ -86,7 +86,7 @@ authRouter
           message: isEmailExist ? 'email already exist' : 'login already exist',
           field: isEmailExist ? 'email' : isLoginExist,
         });
-        return res.status(400).send(errors);
+        return res.status(400).send({ errorsMessages: errors });
       }
       const user = await usersService.createUser(login, password, email);
       if (user) {
