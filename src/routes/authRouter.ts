@@ -41,10 +41,8 @@ authRouter
           accessToken: token,
         };
         res.status(200).send(response);
-        return;
       }
       res.send(401);
-      return;
     },
   )
   .get('/me', authMiddleware, async (req: Request, res: Response) => {
@@ -66,7 +64,6 @@ authRouter
       if (result) {
         res.sendStatus(204);
       } else {
-        console.log('aaa');
         res.status(400).json({
           errorsMessages: [{ message: 'wrong code', field: 'code' }],
         });
