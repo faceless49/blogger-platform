@@ -40,9 +40,10 @@ authRouter
         const response = {
           accessToken: token,
         };
-        res.sendStatus(200).send(response);
+        res.send(response);
       }
-      res.send(401);
+      res.sendStatus(401);
+      return;
     },
   )
   .get('/me', authMiddleware, async (req: Request, res: Response) => {
@@ -90,7 +91,7 @@ authRouter
       }
       const user = await usersService.createUser(login, password, email);
       if (user) {
-        return res.send(204);
+        return res.sendStatus(204);
       } else {
         res.status(400).send({
           errorsMessages: [{ message: 'wrong code', field: 'code' }],
