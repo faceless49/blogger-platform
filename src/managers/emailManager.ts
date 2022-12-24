@@ -16,7 +16,7 @@ export const emailManager = {
       `Registration resend`,
       ` <h1>Thank for your registration</h1>
        <p>To finish registration please follow the link below:
-          <a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
+          <a href='https://blogger-platform.vercel.app/auth/registration-email-resending/?code=${code}'>complete registration</a>
       </p>`,
     );
   },
@@ -27,7 +27,7 @@ export const emailManager = {
       `Registration`,
       ` <h1>Thank for your registration</h1>
        <p>To finish registration please follow the link below:
-          <a href='https://somesite.com/confirm-email?code=${user.emailConfirmation?.confirmationCode}'>complete registration</a>
+          <a href='https://blogger-platform.vercel.app/auth/registration-confirmation/?code=${user.emailConfirmation?.confirmationCode}'>complete registration</a>
       </p>`,
     );
   },

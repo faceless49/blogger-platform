@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { inputValidationMiddleware } from '../middlewares';
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import { usersService } from '../domain/users-service';
 import { jwtService } from '../application/jwtService';
 import { authMiddleware } from '../middlewares/authMiddleware';
@@ -57,21 +57,6 @@ authRouter
   })
 
   .post(
-    '/registration-confirmation',
-    body('code').trim().notEmpty().isString(),
-    inputValidationMiddleware,
-    async (req: Request, res: Response) => {
-      const result = await usersService.confirmEmail(req.body.code);
-      if (result) {
-        res.sendStatus(204);
-      } else {
-        res.status(400).json({
-          errorsMessages: [{ message: 'wrong code', field: 'code' }],
-        });
-      }
-    },
-  )
-  .post(
     '/registration',
     regLoginValidation,
     regEmailValidation,
@@ -94,6 +79,21 @@ authRouter
         return res.sendStatus(204);
       } else {
         res.status(400).send({
+          errorsMessages: [{ message: 'wrong code', field: 'code' }],
+        });
+      }
+    },
+  )
+  .post(
+    '/registration-confirmation',
+    param('code').trim().notEmpty().isString(),
+    inputValidationMiddleware,
+    async (req: Request, res: Response) => {
+      const result = await usersService.confirmEmail(req.params.code);
+      if (result) {
+        res.sendStatus(204);
+      } else {
+        res.status(400).json({
           errorsMessages: [{ message: 'wrong code', field: 'code' }],
         });
       }
