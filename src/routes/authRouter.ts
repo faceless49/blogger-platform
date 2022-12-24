@@ -66,7 +66,9 @@ authRouter
       if (result) {
         res.sendStatus(204);
       } else {
-        res.sendStatus(400);
+        res.sendStatus(400).send({
+          errorsMessages: [{ message: 'wrong code', field: 'code' }],
+        });
       }
     },
   )
