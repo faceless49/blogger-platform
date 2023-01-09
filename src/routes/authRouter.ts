@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { inputValidationMiddleware } from '../middlewares';
-import { body, param } from 'express-validator';
+import { body } from 'express-validator';
 import { usersService } from '../domain/users-service';
 import { jwtService } from '../application/jwtService';
 import { authMiddleware } from '../middlewares/authMiddleware';
@@ -85,11 +85,12 @@ authRouter
     },
   )
   .post(
-    '/registration-confirmation',
-    param('code').trim().notEmpty().isString(),
+    '/registration-confirmation/',
+    body('code').trim().notEmpty().isString(),
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
-      const result = await usersService.confirmEmail(req.params.code);
+      const { code } = req.body;
+      const result = await usersService.confirmEmail(code);
       if (result) {
         res.sendStatus(204);
       } else {

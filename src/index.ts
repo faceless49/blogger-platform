@@ -14,7 +14,7 @@ import { authRouter } from './routes/authRouter';
 import { commentsRouter } from './routes/commentsRouter';
 import { emailRouter } from './routes/emailRouter';
 
-const app = express();
+export const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
@@ -46,10 +46,11 @@ app.use('/email', emailRouter);
 
 const startApp = async () => {
   await runDb();
-
-  app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-  });
+  if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => {
+      console.log(`Example app listening on port ${port}`);
+    });
+  }
 };
 
 startApp();
