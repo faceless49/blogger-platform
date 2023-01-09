@@ -50,7 +50,7 @@ export const usersService = {
     const user = await usersQueryRepository.findByLoginOrEmail(loginOrEmail);
     if (!user) return null;
 
-    if (user?.emailConfirmation?.isConfirmed) return null;
+    // if (user?.emailConfirmation?.isConfirmed) return null;
     const res = await bcrypt.compare(password, user.password);
     if (res) {
       return user;
