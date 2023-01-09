@@ -41,6 +41,7 @@ authRouter
           accessToken: token,
         };
         res.status(200).send(response);
+        return;
       }
       res.send(401);
       return;
