@@ -3,7 +3,7 @@ import { inputValidationMiddleware } from '../middlewares';
 import { body } from 'express-validator';
 import { usersService } from '../domain/users-service';
 import { jwtService } from '../application/jwtService';
-import { authMiddleware } from '../middlewares/authMiddleware';
+import { authMiddleware, verifyToken } from '../middlewares/authMiddleware';
 import { usersQueryRepository } from '../repositories/usersQueryRepository';
 
 export const authRouter = Router({});
@@ -36,11 +36,12 @@ authRouter
       const { loginOrEmail, password } = req.body;
       const user = await usersService.checkCredentials(loginOrEmail, password);
       if (user) {
-        const token = await jwtService.createJWT(user);
+        const token = await jwtService.createJwtTokensPair(user.id);
+        const refreshToken = await jwtService.createAccessToken(user);
         const response = {
           accessToken: token,
         };
-        res.status(200).send(response);
+        res.cookie('refreshToken', refreshToken).status(200).send(response);
         return;
       }
       res.send(401);
@@ -115,4 +116,25 @@ authRouter
         });
       }
     },
-  );
+  )
+  .post('/refresh-token', verifyToken, async (req: Request, res: Response) => {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+      if (!refreshToken) {
+        console.log('NoTokens in cookie');
+        return res.sendStatus(401);
+      }
+      const user = res.locals.userData;
+      const newTokens = await jwtService.createJwtTokensPair(user.id);
+      if (!newTokens) {
+        return res.sendStatus(401);
+      }
+      res.cookie('refreshToken', newTokens.refreshToken, {
+        httpOnly: true,
+        secure: true,
+      });
+      return res.send({ accessToken: newTokens.accessToken });
+    } catch (e) {
+      console.error(e);
+    }
+  });

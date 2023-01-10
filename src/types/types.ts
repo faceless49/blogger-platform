@@ -55,6 +55,7 @@ export type UserDBType = {
     expirationDate?: Date;
     isConfirmed?: boolean;
   };
+  revokedTokens?: string[] | null;
 };
 
 export type CommentType = {
