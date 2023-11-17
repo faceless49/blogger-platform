@@ -6,6 +6,7 @@ import {
   postsCollection,
   runDb,
   usersCollection,
+  videosCollection,
 } from './repositories/db';
 import { postsRouter } from './routes/postsRouter';
 import { videosRouter } from './routes/videosRouter';
@@ -33,6 +34,7 @@ app.delete('/testing/all-data', async (req: Request, res: Response) => {
   await postsCollection.deleteMany({});
   await usersCollection.deleteMany({});
   await commentsCollection.deleteMany({});
+  await videosCollection.deleteMany({});
   res.sendStatus(204);
 });
 

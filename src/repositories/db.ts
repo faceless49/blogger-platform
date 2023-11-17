@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import { BlogType, CommentType, PostType, UserDBType } from '../types/types';
+import { BlogType, CommentType, PostType, UserDBType, VideoType } from '../types/types';
 import 'dotenv/config';
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://0.0.0.0:27017';
@@ -10,6 +10,7 @@ export const postsCollection = db.collection<PostType>('posts');
 export const blogsCollection = db.collection<BlogType>('blogs');
 export const usersCollection = db.collection<UserDBType>('users');
 export const commentsCollection = db.collection<CommentType>('comments');
+export const videosCollection = db.collection<VideoType>('videos');
 
 export async function runDb() {
   console.log('run DB');
