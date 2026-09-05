@@ -15,6 +15,7 @@ export type BlogType = {
   websiteUrl: string;
   createdAt: string;
   description: string;
+  isMembership: boolean;
 };
 export type PostType = {
   id: string;

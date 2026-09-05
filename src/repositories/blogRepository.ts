@@ -16,7 +16,7 @@ export const blogRepository = {
     name,
     websiteUrl,
     description,
-  }: Omit<BlogType, 'createdAt'>) {
+  }: Omit<BlogType, 'createdAt' | 'isMembership'>) {
     const result = await blogsCollection.updateOne(
       { id },
       {

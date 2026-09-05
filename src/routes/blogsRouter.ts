@@ -127,7 +127,12 @@ blogsRouter
     async (req: Request, res: Response) => {
       const { id } = req.params;
       const { name, websiteUrl, description } = req.body;
-      const payload: Omit<BlogType, 'createdAt'> = { id, name, websiteUrl, description };
+      const payload: Omit<BlogType, 'createdAt' | 'isMembership'> = {
+        id,
+        name,
+        websiteUrl,
+        description,
+      };
 
       const isUpdated = await blogsService.updateVideoById(payload);
       isUpdated ? res.sendStatus(204) : res.send(404);

@@ -51,6 +51,7 @@ export const blogsService = {
       name,
       websiteUrl,
       description,
+      isMembership: false,
     };
     return await blogRepository.createBlog(newBlog);
   },
@@ -60,7 +61,7 @@ export const blogsService = {
     name,
     websiteUrl,
     description,
-  }: Omit<BlogType, 'createdAt'>) {
+  }: Omit<BlogType, 'createdAt' | 'isMembership'>) {
     return await blogRepository.updateVideoById({ id, name, websiteUrl, description });
   },
 
